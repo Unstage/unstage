@@ -1,0 +1,40 @@
+{
+  "name": "@techdet/app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --port 3001",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "start": "next start",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@techdet/ui": "workspace:*",
+    "@techdet/db": "workspace:*",
+    "@techdet/trpc": "workspace:*",
+    "@techdet/email": "workspace:*",
+    "@techdet/auth": "workspace:*",
+    "@trpc/client": "^11.4.3",
+    "@trpc/next": "^11.4.3",
+    "@trpc/react-query": "^11.4.3",
+    "@tanstack/react-query": "^5.83.0",
+    "@monaco-editor/react": "^4.6.0",
+    "next": "^15.4.1",
+    "openai": "^4.28.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "@techdet/typescript-config": "workspace:*",
+    "@types/node": "^24.0.14",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.8.3"
+  }
+}

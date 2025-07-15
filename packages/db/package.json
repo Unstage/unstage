@@ -1,0 +1,31 @@
+{
+	"name": "@techdet/db",
+	"version": "0.0.1",
+	"private": true,
+	"exports": {
+		".": "./src/index.ts",
+		"./client": "./src/client.ts",
+		"./schema": "./src/schema/index.ts"
+	},
+	"scripts": {
+		"db:push": "drizzle-kit push",
+		"db:studio": "drizzle-kit studio",
+		"db:migrate": "drizzle-kit generate",
+		"lint": "biome lint .",
+		"format": "biome format --write .",
+		"check": "biome check .",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@neondatabase/serverless": "^1.0.1",
+		"drizzle-orm": "^0.44.3",
+		"zod": "^4.0.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.0.6",
+		"@techdet/typescript-config": "workspace:*",
+		"@types/node": "^24.0.14",
+		"drizzle-kit": "^0.31.4",
+		"typescript": "^5.8.3"
+	}
+}

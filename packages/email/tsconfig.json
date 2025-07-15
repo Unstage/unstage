@@ -1,5 +1,5 @@
 {
-	"extends": "@techdet/typescript-config/react-library.json",
+	"extends": "@techdet/typescript-config/base.json",
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
