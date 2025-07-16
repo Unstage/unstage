@@ -1,11 +1,11 @@
 {
-	"extends": "@techdet/typescript-config/base.json",
-	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./src/*"]
-		}
-	},
-	"include": ["src/**/*", "drizzle.config.ts"],
-	"exclude": ["node_modules"]
+  "extends": "@unstage/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "drizzle.config.ts"],
+  "exclude": ["node_modules"]
 }

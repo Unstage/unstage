@@ -1,26 +1,26 @@
 {
-	"name": "@techdet/auth",
-	"version": "0.0.1",
-	"private": true,
-	"exports": {
-		".": "./src/index.ts",
-		"./config": "./src/config.ts"
-	},
-	"scripts": {
-		"lint": "biome lint .",
-		"format": "biome format --write .",
-		"check": "biome check .",
-		"type-check": "tsc --noEmit"
-	},
-	"dependencies": {
-		"@techdet/db": "workspace:*",
-		"better-auth": "^1.2.12",
-		"zod": "^4.0.5"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.0.6",
-		"@techdet/typescript-config": "workspace:*",
-		"@types/node": "^24.0.14",
-		"typescript": "^5.8.3"
-	}
+  "name": "@unstage/auth",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config.ts"
+  },
+  "scripts": {
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@unstage/db": "workspace:*",
+    "better-auth": "^1.2.12",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "@unstage/typescript-config": "workspace:*",
+    "@types/node": "^24.0.14",
+    "typescript": "^5.8.3"
+  }
 }

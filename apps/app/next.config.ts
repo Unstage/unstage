@@ -1,18 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	experimental: {
-		optimizePackageImports: ["@techdet/ui"],
-	},
-	transpilePackages: [
-		"@techdet/ui",
-		"@techdet/db",
-		"@techdet/trpc",
-		"@techdet/email",
-		"@techdet/auth",
-	],
-	images: {
-		domains: [],
-	},
+  experimental: {
+    optimizePackageImports: ["@unstage/ui"],
+  },
+  transpilePackages: [
+    "@unstage/ui",
+    "@unstage/db",
+    "@unstage/trpc",
+    "@unstage/email",
+    "@unstage/auth",
+  ],
+  images: {
+    domains: [],
+  },
 };
 
 module.exports = nextConfig;

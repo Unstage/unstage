@@ -1,19 +1,19 @@
 {
-	"$schema": "https://ui.shadcn.com/schema.json",
-	"rsc": true,
-	"tsx": true,
-	"tailwind": {
-		"config": "",
-		"css": "src/styles/globals.css",
-		"baseColor": "zinc",
-		"cssVariables": true
-	},
-	"iconLibrary": "lucide",
-	"aliases": {
-		"components": "@techdet/ui/components",
-		"utils": "@techdet/ui/lib/utils",
-		"hooks": "@techdet/ui/hooks",
-		"lib": "@techdet/ui/lib",
-		"ui": "@techdet/ui/components"
-	}
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles/globals.css",
+    "baseColor": "zinc",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@unstage/ui/components",
+    "utils": "@unstage/ui/lib/utils",
+    "hooks": "@unstage/ui/hooks",
+    "lib": "@unstage/ui/lib",
+    "ui": "@unstage/ui/components"
+  }
 }

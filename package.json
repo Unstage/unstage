@@ -1,5 +1,5 @@
 {
-  "name": "techdet",
+  "name": "unstage",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -14,7 +14,7 @@
     "db:migrate": "turbo db:migrate"
   },
   "devDependencies": {
-    "@techdet/typescript-config": "workspace:*",
+    "@unstage/typescript-config": "workspace:*",
     "@biomejs/biome": "^2.0.6",
     "@turbo/gen": "^2.5.4",
     "turbo": "^2.5.4",
