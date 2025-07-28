@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "exports": {
-    ".": "./src/index.ts",
-    "./config": "./src/config.ts"
+    ".": "./src/auth.ts",
+    "./client": "./src/client.ts"
   },
   "scripts": {
     "lint": "biome lint .",
@@ -14,13 +14,15 @@
   },
   "dependencies": {
     "@unstage/db": "workspace:*",
+    "@unstage/email": "workspace:*",
     "better-auth": "^1.2.12",
+    "resend": "^4.7.0",
     "zod": "^4.0.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
-    "@unstage/typescript-config": "workspace:*",
     "@types/node": "^24.0.14",
+    "@unstage/typescript-config": "workspace:*",
     "typescript": "^5.8.3"
   }
 }

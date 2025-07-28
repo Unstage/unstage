@@ -1,11 +1,13 @@
 {
-  "extends": "@unstage/typescript-config/base.json",
+  "extends": "@unstage/typescript-config/react-library.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./*"],
+      "@emails/*": ["./emails/*"],
+      "@components/*": ["./components/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["components/**/*", "emails/**/*"],
   "exclude": ["node_modules"]
 }

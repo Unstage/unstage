@@ -3,7 +3,13 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["@unstage/ui"],
   },
-  transpilePackages: ["@unstage/ui", "@unstage/db", "@unstage/trpc", "@unstage/email"],
+  transpilePackages: [
+    "@unstage/ui",
+    "@unstage/db",
+    "@unstage/trpc",
+    "@unstage/email",
+    "@unstage/auth",
+  ],
   images: {
     domains: [],
   },
