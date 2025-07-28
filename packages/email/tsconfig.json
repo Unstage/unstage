@@ -3,9 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@emails/*": ["./emails/*"],
-      "@components/*": ["./components/*"]
+      "@components/*": ["./components/*.tsx"],
+      "@emails/*": ["./emails/*.tsx"]
     }
   },
   "include": ["components/**/*", "emails/**/*"],

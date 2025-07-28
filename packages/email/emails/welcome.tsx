@@ -60,7 +60,7 @@ export const WelcomeEmail = ({ fullName = "Viktor Hofte" }: Props) => {
             Take your time to explore Unstage at your own pace. If you ever want to chat with us
             founders, you can schedule a time{" "}
             <Link
-              href="https://cal.com/pontus-unstage/15min"
+              href="https://cal.com/peyton-unstage/15min"
               className={`underline ${themeClasses.link}`}
               style={{ color: lightStyles.text.color }}
             >
@@ -71,16 +71,8 @@ export const WelcomeEmail = ({ fullName = "Viktor Hofte" }: Props) => {
             If there's anything we can do to help, just reply. We're always one message away.
           </Text>
 
-          <br />
-
-          <Img
-            src={`${baseUrl}/email/founders.jpeg`}
-            alt="Founders"
-            className="my-0 mx-auto block w-full"
-          />
-
           <Text className={themeClasses.mutedText} style={{ color: lightStyles.mutedText.color }}>
-            Best regards, founders
+            Best regards,
           </Text>
 
           <style>{`
@@ -107,7 +99,7 @@ export const WelcomeEmail = ({ fullName = "Viktor Hofte" }: Props) => {
           <Img
             src={`${baseUrl}/email/signature.png`}
             alt="Signature"
-            className="block w-full w-[143px] h-[20px] signature-blend"
+            className="block w-[143px] h-[56px] signature-blend"
           />
 
           <br />

@@ -28,10 +28,10 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         const { data, error } = await resend.emails.send({
-          from: "Unstage <onboarding@unstage.dev>",
+          from: "Unstage <noreply@unstage.dev>",
           to: [email],
           subject: type === "sign-in" ? "Sign in to Unstage" : "Verify your email",
-          react: EmailOtp({ fullName: "John Doe" }),
+          react: EmailOtp({ otp }),
         });
 
         if (error) {

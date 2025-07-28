@@ -212,6 +212,28 @@ export function EmailThemeProvider({
 
           {/* Default fonts for all emails */}
           <Font
+            fontFamily="Space Grotesk"
+            fallbackFontFamily="Arial"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/space-grotesk@5.2.8/files/space-grotesk-latin-600-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={600}
+            fontStyle="normal"
+          />
+
+          <Font
+            fontFamily="Geist"
+            fallbackFontFamily="Helvetica"
+            webFont={{
+              url: "https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/files/geist-sans-latin-300-normal.woff2",
+              format: "woff2",
+            }}
+            fontWeight={300}
+            fontStyle="normal"
+          />
+
+          <Font
             fontFamily="Geist"
             fallbackFontFamily="Helvetica"
             webFont={{

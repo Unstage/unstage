@@ -1,8 +1,7 @@
-import { Body, Container, Heading, Img, Link, Preview, Text } from "@react-email/components";
-import { getEmailUrl } from "@unstage/utils/envs";
+import { Body, Container, Heading, Link, Preview, Text } from "@react-email/components";
 import { Footer } from "../components/footer";
-import { GetStarted } from "../components/get-started";
 import { Logo } from "../components/logo";
+import { OtpCode } from "../components/otp-code";
 import {
   EmailThemeProvider,
   getEmailInlineStyles,
@@ -10,14 +9,11 @@ import {
 } from "../components/theme";
 
 interface Props {
-  fullName: string;
+  otp: string;
 }
 
-const baseUrl = getEmailUrl();
-
-export const EmailOtp = ({ fullName = "Viktor Hofte" }: Props) => {
-  const firstName = fullName.split(" ").at(0);
-  const text = `Hi ${firstName}, Welcome to Unstage! I'm Peyton, one of the founders. It's really important to us that you have a great experience ramping up.`;
+export const EmailOtp = ({ otp = "123456" }: Props) => {
+  const text = `Your Unstage verification code is ${otp}.`;
   const themeClasses = getEmailThemeClasses();
   const lightStyles = getEmailInlineStyles("light");
 
@@ -34,88 +30,28 @@ export const EmailOtp = ({ fullName = "Viktor Hofte" }: Props) => {
         >
           <Logo />
           <Heading
-            className={`text-[21px] font-normal text-center p-0 my-[30px] mx-0 ${themeClasses.heading}`}
-            style={{ color: lightStyles.text.color }}
+            className={`text-[28px] font-normal text-center p-0 my-[20px] mx-0 ${themeClasses.heading}`}
+            style={{
+              color: lightStyles.text.color,
+              fontFamily: "Space Grotesk, Helvetica, Arial, sans-serif",
+            }}
           >
-            Welcome to Unstage
+            Sign in to Unstage
           </Heading>
 
-          <br />
+          <Text className={`font-light text-center`} style={{ color: lightStyles.mutedText.color }}>
+            Use the following code to finish signing in to Unstage:
+          </Text>
 
-          <span
-            className={`font-medium ${themeClasses.text}`}
-            style={{ color: lightStyles.text.color }}
+          <OtpCode otp={otp} />
+
+          <Text
+            className={`font-light text-center text-xs mt-[50px]`}
+            style={{ color: lightStyles.mutedText.color }}
           >
-            Hi {firstName},
-          </span>
-          <Text className={themeClasses.text} style={{ color: lightStyles.text.color }}>
-            Welcome to Unstage! I'm Peyton, one of the founders.
-            <br />
-            <br />
-            We built Unstage from over 10 years of running our own businesses, knowing firsthand the
-            challenges that come with it. Unstage is self-funded and built together with our
-            customers, and it's important to us that you know we're here when you need us.
-            <br />
-            <br />
-            Take your time to explore Unstage at your own pace. If you ever want to chat with us
-            founders, you can schedule a time{" "}
-            <Link
-              href="https://cal.com/peyton-unstage/15min"
-              className={`underline ${themeClasses.link}`}
-              style={{ color: lightStyles.text.color }}
-            >
-              here
-            </Link>
-            <br />
-            <br />
-            If there's anything we can do to help, just reply. We're always one message away.
+            If you didn't request this, you can contact us at{" "}
+            <Link href="mailto:support@unstage.dev">support@unstage.dev</Link>
           </Text>
-
-          <br />
-
-          <Img
-            src={`${baseUrl}/email/founders.jpeg`}
-            alt="Founders"
-            className="my-0 mx-auto block w-full"
-          />
-
-          <Text className={themeClasses.mutedText} style={{ color: lightStyles.mutedText.color }}>
-            Best regards, founders
-          </Text>
-
-          <style>{`
-            .signature-blend {
-              filter: none;
-            }
-            
-            /* Regular dark mode - exclude Outlook.com */
-            @media (prefers-color-scheme: dark) {
-              .signature-blend:not([class^="x_"]) {
-                filter: invert(1) brightness(1);
-              }
-            }
-            
-            /* Outlook.com specific dark mode targeting */
-            [data-ogsb] .signature-blend,
-            [data-ogsc] .signature-blend,
-            [data-ogac] .signature-blend,
-            [data-ogab] .signature-blend {
-              filter: invert(1) brightness(1);
-            }
-          `}</style>
-
-          <Img
-            src={`${baseUrl}/email/signature.png`}
-            alt="Signature"
-            className="block w-[143px] h-[20px] signature-blend"
-          />
-
-          <br />
-          <br />
-
-          <GetStarted />
-
-          <br />
 
           <Footer />
         </Container>

@@ -35,8 +35,8 @@ export function Logo() {
 
       <Img
         src={`${baseUrl}/email/logo.png`}
-        width="40"
-        height="40"
+        width="48"
+        height="48"
         alt="Unstage"
         className="my-0 mx-auto block logo-blend"
       />
