@@ -1,4 +1,4 @@
-# Base image with Bun
+# Base image with pnpm
 FROM node:24-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -13,7 +13,7 @@ FROM turbo-cli AS builder
 WORKDIR /app
 # Copy all files
 COPY . .
-# Use turbo CLI from Bun global install to prune workspaces
+# Use turbo CLI from pnpm global install to prune workspaces
 RUN turbo prune @unstage/api --docker
 
 # Installer stage
@@ -22,7 +22,7 @@ WORKDIR /app
 
 # First install the dependencies (as they change less often)
 COPY --from=builder /app/out/json/ .
-# Don't copy the lockfile, allow Bun to generate a fresh one
+# Don't copy the lockfile, allow pnpm to generate a fresh one
 RUN pnpm install
 
 # Copy the full source code
