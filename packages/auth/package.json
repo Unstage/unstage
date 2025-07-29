@@ -15,6 +15,7 @@
   "dependencies": {
     "@unstage/db": "workspace:*",
     "@unstage/email": "workspace:*",
+    "@unstage/utils": "workspace:*",
     "better-auth": "^1.2.12",
     "resend": "^4.7.0",
     "zod": "^4.0.5"

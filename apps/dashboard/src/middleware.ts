@@ -21,6 +21,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  if (session && !session.user.is_onboarded && !pathname.startsWith("/setup")) {
+    return NextResponse.redirect(new URL("/setup", request.url));
+  }
+
   return NextResponse.next();
 }
 

@@ -3,7 +3,14 @@
 import { useZodForm } from "@hooks/use-zod-form";
 import { authClient } from "@unstage/auth/client";
 import { Button } from "@unstage/ui/components/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@unstage/ui/components/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@unstage/ui/components/form";
 import {
   InputOTP,
   InputOTPGroup,
@@ -78,9 +85,9 @@ export default function OtpForm({ email }: OtpFormProps) {
                       </InputOTPGroup>
                     </InputOTP>
                   </FormControl>
-                  <FormLabel className="font-light">
+                  <FormDescription className="font-light">
                     Code sent to: <span className="font-semibold">{email}.</span>
-                  </FormLabel>
+                  </FormDescription>
                 </FormItem>
               )}
             />

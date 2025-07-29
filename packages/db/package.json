@@ -4,11 +4,10 @@
   "private": true,
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.ts",
     "./schema": "./src/schema.ts"
   },
   "scripts": {
-    "db:push": "drizzle-kit push",
+    "db:push": "drizzle-kit push --config=./drizzle.config.ts",
     "db:studio": "drizzle-kit studio",
     "db:migrate": "drizzle-kit generate",
     "lint": "biome lint .",
@@ -18,13 +17,14 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
+    "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.3",
     "zod": "^4.0.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
-    "@unstage/typescript-config": "workspace:*",
     "@types/node": "^24.0.14",
+    "@unstage/typescript-config": "workspace:*",
     "drizzle-kit": "^0.31.4",
     "typescript": "^5.8.3"
   }
