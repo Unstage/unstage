@@ -1,56 +1,44 @@
-# ---------- Base ----------
+# Base image with Bun
 FROM node:24-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+# Install turbo CLI globally using pnpm
+FROM base AS turbo-cli
+RUN pnpm add -g turbo
+
+# Builder stage
+FROM turbo-cli AS builder
 WORKDIR /app
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# ---------- Prune ----------
-FROM base AS prune
-WORKDIR /app
-
-# Copy only necessary files early to avoid cache busting
-COPY package.json pnpm-lock.yaml turbo.json ./
-COPY apps/api/package.json apps/api/
-COPY packages/ packages/
-COPY .gitignore .npmrc ./
-
-# Install full deps temporarily to allow Turbo prune
-RUN pnpm install --frozen-lockfile
-
-# Copy the rest for pruning
+# Copy all files
 COPY . .
+# Use turbo CLI from Bun global install to prune workspaces
+RUN turbo prune @unstage/api --docker
 
-# Prune for only what's needed by @unstage/api
-RUN pnpm exec turbo prune --scope=@unstage/api --docker
-
-# ---------- Install ----------
-FROM base AS install
+# Installer stage
+FROM base AS installer
 WORKDIR /app
 
-# Copy pruned package manifests & lockfile
-COPY --from=prune /app/out/json/ ./
+# First install the dependencies (as they change less often)
+COPY --from=builder /app/out/json/ .
+# Don't copy the lockfile, allow Bun to generate a fresh one
+RUN pnpm install
 
-# Install pruned deps
-RUN pnpm install --frozen-lockfile
+# Copy the full source code
+COPY --from=builder /app/out/full/ .
 
-# Copy the full pruned source code
-COPY --from=prune /app/out/full/ ./
+# Runner stage (same as installer to avoid another copy)
+FROM installer AS runner
 
-# ---------- Build ----------
-FROM install AS build
-RUN pnpm turbo run build --filter=@unstage/api...
-
-# ---------- Runtime ----------
-FROM node:24-slim AS runtime
-WORKDIR /app
-
-# Copy runtime files only
-COPY --from=install /app/node_modules ./node_modules
-COPY --from=build /app/apps/api/dist ./apps/api/dist
-COPY --from=install /app/apps/api/package.json ./apps/api/package.json
-
-ENV NODE_ENV=production
+# Set the API directory as working directory
 WORKDIR /app/apps/api
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Expose the port the API runs on
 EXPOSE 8080
 
-CMD ["node", "dist/index.js"]
-    
+# Run the API directly with pnpm
+CMD ["pnpm", "run", "start"]
