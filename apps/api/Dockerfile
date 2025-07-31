@@ -38,7 +38,7 @@ WORKDIR /app/apps/api
 ENV NODE_ENV=production
 
 # Expose the port the API runs on
-EXPOSE 8080
+EXPOSE 3000
 
 # Run the API directly with pnpm
 CMD ["pnpm", "run", "start"]
