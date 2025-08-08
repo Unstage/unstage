@@ -11,16 +11,18 @@
     "clean": "turbo clean",
     "db:push": "turbo db:push",
     "db:studio": "turbo db:studio",
-    "db:migrate": "turbo db:migrate"
+    "db:migrate": "turbo db:migrate",
+    "sync:check": "syncpack lint"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.1.4",
+    "@turbo/gen": "^2.5.5",
     "@unstage/typescript-config": "workspace:*",
-    "@biomejs/biome": "^2.0.6",
-    "@turbo/gen": "^2.5.4",
-    "turbo": "^2.5.4",
-    "typescript": "^5.8.3"
+    "syncpack": "14.0.0-alpha.19",
+    "turbo": "^2.5.5",
+    "typescript": "^5.9.2"
   },
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.14.0",
   "engines": {
     "node": ">=24"
   }

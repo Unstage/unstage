@@ -1,0 +1,14 @@
+{
+  "name": "@unstage/encryption",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.4",
+    "@unstage/typescript-config": "workspace:*",
+    "@types/node": "^24.2.1",
+    "typescript": "^5.9.2"
+  }
+}

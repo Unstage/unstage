@@ -64,7 +64,8 @@ app.doc("/openapi", {
   },
   servers: [
     {
-      url: "https://api.unstage.dev",
+      url:
+        process.env.NODE_ENV === "production" ? "https://api.unstage.dev" : "http://localhost:8787",
       description: "Production API",
     },
   ],
@@ -88,7 +89,4 @@ app.get("/", Scalar({ url: "/openapi", pageTitle: "Unstage API", theme: "saturn"
 
 app.route("/", routers);
 
-export default {
-  port: process.env.PORT ? Number.parseInt(process.env.PORT) : 3000,
-  fetch: app.fetch,
-};
+export default app;

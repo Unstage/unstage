@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactElement } from "react";
 import { baseUrl } from "./sitemap";
 
@@ -86,15 +87,17 @@ export default function Layout({ children }: { children: ReactElement }) {
       suppressHydrationWarning
       className={`${GeistSans.variable} ${GeistMono.variable} ${fontDisplay.variable}`}
     >
-      <body className="bg-[#fbfbfb] dark:bg-[#0C0C0C] overflow-x-hidden font-sans antialiased min-h-screen">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <body className="bg-background overflow-x-hidden font-sans antialiased min-h-screen">
+        <NuqsAdapter>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
