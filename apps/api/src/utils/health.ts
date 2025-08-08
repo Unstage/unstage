@@ -1,5 +1,5 @@
-import db, { sql } from "@unstage/db";
+import { sql } from "@unstage/db";
 
 export async function checkHealth() {
-  return await db.execute(sql`SELECT 1`);
+  return await sql`SELECT 1`;
 }

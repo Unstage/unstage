@@ -1,5 +1,14 @@
+import Header from "@components/header";
+import { Sidebar } from "@components/sidebar";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="container mx-auto px-4 overflow-hidden md:overflow-visible">{children}</main>
+    <div className="relative">
+      <Sidebar />
+      <div className="md:ml-[70px] pb-8">
+        <Header />
+        <div className="px-6">{children}</div>
+      </div>
+    </div>
   );
 }
