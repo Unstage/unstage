@@ -1,16 +1,32 @@
 import db from "@unstage/db";
+import { getUserById } from "@unstage/db/queries/users";
 import EmailOtp from "@unstage/email/email-otp";
 import { assertIsSignIn } from "@unstage/utils/assertions";
-import { betterAuth, type Session } from "better-auth";
+import { type BetterAuthOptions, betterAuth, type Session } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP } from "better-auth/plugins";
+import { emailOTP, organization } from "better-auth/plugins";
 import { Resend } from "resend";
 import { betterAuthSchema } from "./schema";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const auth = betterAuth({
+const authConfig = {
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session: Session) => {
+          const user = await getUserById(db, session.userId);
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: user?.lastActiveOrganizationId,
+            },
+          };
+        },
+      },
+    },
+  },
   advanced: {
     cookiePrefix: "unstage",
     database: {
@@ -26,25 +42,31 @@ export const auth = betterAuth({
     additionalFields: {
       isOnboarded: {
         type: "boolean",
-        default: false,
+        defaultValue: false,
+        input: false,
+      },
+      lastActiveOrganizationId: {
+        type: "string",
+        required: false,
+        defaultValue: null,
         input: false,
       },
       role: {
         type: "string",
         required: false,
-        default: "candidate",
+        defaultValue: "candidate",
         input: false,
       },
       locale: {
         type: "string",
         required: false,
-        default: "en",
+        defaultValue: "en",
         input: false,
       },
       timezone: {
         type: "string",
         required: false,
-        default: "UTC",
+        defaultValue: "UTC",
         input: false,
       },
     },
@@ -67,6 +89,7 @@ export const auth = betterAuth({
   // },
 
   plugins: [
+    organization(),
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         // We only support email OTP for sign-in, email-verification and password-reset are not supported.
@@ -85,6 +108,8 @@ export const auth = betterAuth({
     }),
     nextCookies(),
   ],
-});
+} satisfies BetterAuthOptions;
+
+export const auth = betterAuth(authConfig) as ReturnType<typeof betterAuth<typeof authConfig>>;
 
 export type { Session };

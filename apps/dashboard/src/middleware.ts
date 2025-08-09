@@ -13,6 +13,8 @@ export async function middleware(request: NextRequest) {
     headers: await headers(),
   });
 
+  console.log(session);
+
   if (!session && !pathname.startsWith("/sign-in")) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }

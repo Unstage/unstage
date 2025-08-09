@@ -4,7 +4,6 @@ import {
   index,
   pgEnum,
   pgTable,
-  primaryKey,
   text,
   timestamp,
   uuid,
@@ -14,7 +13,14 @@ export const rolesEnum = pgEnum("roles", ["candidate", "recruiter"]);
 
 export const plansEnum = pgEnum("plans", ["trial", "starter", "pro"]);
 
-export const teamRolesEnum = pgEnum("teamRoles", ["owner", "member"]);
+export const memberRolesEnum = pgEnum("memberRoles", ["owner", "admin", "member"]);
+
+export const organizationInviteStatusEnum = pgEnum("organizationInviteStatus", [
+  "pending",
+  "accepted",
+  "rejected",
+  "cancelled",
+]);
 
 export const interviewStatusEnum = pgEnum("interviewStatus", [
   "draft",
@@ -31,8 +37,8 @@ export const users = pgTable(
     email: text("email").unique(),
     emailVerified: boolean("email_verified").default(false),
     avatarUrl: text("avatar_url"),
-    teamId: uuid("team_id"),
     isOnboarded: boolean("is_onboarded").default(false),
+    lastActiveOrganizationId: uuid("last_active_organization_id"),
     locale: text("locale").default("en"),
     timezone: text("timezone"),
     timezoneAutoSync: boolean("timezone_auto_sync").default(true),
@@ -44,11 +50,10 @@ export const users = pgTable(
   },
   (table) => [
     index("users_email_idx").using("btree", table.email.asc().nullsLast()),
-    index("users_team_id_idx").using("btree", table.teamId.asc().nullsLast().op("uuid_ops")),
     foreignKey({
-      columns: [table.teamId],
-      foreignColumns: [teams.id],
-      name: "users_team_id_fk",
+      columns: [table.lastActiveOrganizationId],
+      foreignColumns: [organizations.id],
+      name: "users_last_active_organization_id_fk",
     }).onDelete("set null"),
   ]
 );
@@ -57,6 +62,7 @@ export const sessions = pgTable("sessions", {
   id: uuid().defaultRandom().primaryKey().notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
+  activeOrganizationId: uuid("active_organization_id"),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
   ipAddress: text("ip_address"),
@@ -93,49 +99,76 @@ export const verifications = pgTable("verifications", {
   updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
 });
 
-export const teams = pgTable("teams", {
+export const organizations = pgTable("organizations", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-  name: text(),
+  name: text("name"),
+  slug: text("slug").unique(),
   logoUrl: text("logo_url"),
-  canceledAt: timestamp("canceled_at", {
-    withTimezone: true,
-    mode: "string",
-  }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
   plan: plansEnum().default("trial").notNull(),
 });
 
-export const usersOnTeam = pgTable(
-  "users_on_team",
+export const members = pgTable(
+  "members",
   {
+    id: uuid().defaultRandom().primaryKey().notNull(),
     userId: uuid("user_id").notNull(),
-    teamId: uuid("team_id").notNull(),
-    id: uuid().defaultRandom().notNull(),
-    role: teamRolesEnum(),
+    organizationId: uuid("organization_id").notNull(),
+    role: memberRolesEnum().default("member").notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       mode: "string",
     }).defaultNow(),
   },
   (table) => [
-    index("users_on_team_user_id_idx").using(
+    index("members_user_id_idx").using("btree", table.userId.asc().nullsLast().op("uuid_ops")),
+    index("members_organization_id_idx").using(
       "btree",
-      table.userId.asc().nullsLast().op("uuid_ops")
+      table.organizationId.asc().nullsLast().op("uuid_ops")
     ),
-    index("users_on_team_team_id_idx").using(
-      "btree",
-      table.teamId.asc().nullsLast().op("uuid_ops")
-    ),
-    primaryKey({ columns: [table.userId, table.teamId, table.id], name: "users_on_team_pk" }),
     foreignKey({
       columns: [table.userId],
       foreignColumns: [users.id],
-      name: "users_on_team_user_id_fk",
+      name: "members_user_id_fk",
     }).onDelete("cascade"),
     foreignKey({
-      columns: [table.teamId],
-      foreignColumns: [teams.id],
-      name: "users_on_team_team_id_fk",
+      columns: [table.organizationId],
+      foreignColumns: [organizations.id],
+      name: "members_organization_id_fk",
+    }).onDelete("cascade"),
+  ]
+);
+
+export const organizationInvites = pgTable(
+  "organization_invites",
+  {
+    id: uuid().defaultRandom().primaryKey().notNull(),
+    email: text("email").notNull(),
+    inviterId: uuid("inviter_id").notNull(),
+    organizationId: uuid("organization_id").notNull(),
+    role: memberRolesEnum().default("member").notNull(),
+    status: organizationInviteStatusEnum().default("pending").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
+      .notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
+  },
+  (table) => [
+    index("organization_invites_email_idx").using("btree", table.email.asc()),
+    index("organization_invites_organization_id_idx").using(
+      "btree",
+      table.organizationId.asc().nullsLast().op("uuid_ops")
+    ),
+    foreignKey({
+      columns: [table.inviterId],
+      foreignColumns: [users.id],
+      name: "organization_invites_inviter_id_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.organizationId],
+      foreignColumns: [organizations.id],
+      name: "organization_invites_organization_id_fk",
     }).onDelete("cascade"),
   ]
 );
@@ -222,7 +255,7 @@ export const apikeys = pgTable(
     name: text("name"),
     keyHash: text("key_hash").notNull().unique(),
     userId: uuid("user_id").notNull(),
-    teamId: uuid("team_id"),
+    organizationId: uuid("organization_id"),
     scopes: text("scopes").array(),
     expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
@@ -234,16 +267,19 @@ export const apikeys = pgTable(
   (table) => [
     index("apikeys_key_hash_idx").using("btree", table.keyHash.asc().nullsLast()),
     index("apikeys_user_id_idx").using("btree", table.userId.asc().nullsLast().op("uuid_ops")),
-    index("apikeys_team_id_idx").using("btree", table.teamId.asc().nullsLast().op("uuid_ops")),
+    index("apikeys_organization_id_idx").using(
+      "btree",
+      table.organizationId.asc().nullsLast().op("uuid_ops")
+    ),
     foreignKey({
       columns: [table.userId],
       foreignColumns: [users.id],
       name: "apikeys_user_id_fk",
     }).onDelete("cascade"),
     foreignKey({
-      columns: [table.teamId],
-      foreignColumns: [teams.id],
-      name: "apikeys_team_id_fk",
+      columns: [table.organizationId],
+      foreignColumns: [organizations.id],
+      name: "apikeys_organization_id_fk",
     }).onDelete("cascade"),
   ]
 );

@@ -1,5 +1,5 @@
 import type { Database } from "@unstage/db";
-import { teams, users, usersOnTeam } from "@unstage/db/schema";
+import { members, organizations, users } from "@unstage/db/schema";
 import type { InferSelectModel } from "drizzle-orm";
 import { eq, inArray, sql } from "drizzle-orm";
 
@@ -20,17 +20,17 @@ export const getUserById = async (db: Database, id: string) => {
       updatedAt: users.updatedAt,
       timezone: users.timezone,
       timezoneAutoSync: users.timezoneAutoSync,
-      teamId: users.teamId,
-      team: {
-        id: teams.id,
-        name: teams.name,
-        logoUrl: teams.logoUrl,
-        plan: teams.plan,
-        createdAt: teams.createdAt,
+      lastActiveOrganizationId: users.lastActiveOrganizationId,
+      organization: {
+        id: organizations.id,
+        name: organizations.name,
+        logoUrl: organizations.logoUrl,
+        plan: organizations.plan,
+        createdAt: organizations.createdAt,
       },
     })
     .from(users)
-    .leftJoin(teams, eq(users.teamId, teams.id))
+    .leftJoin(organizations, eq(users.lastActiveOrganizationId, organizations.id))
     .where(eq(users.id, id));
 
   return result ?? null;
@@ -54,7 +54,7 @@ export const updateUser = async (db: Database, data: UpdateUserParams) => {
     role: users.role,
     timezone: users.timezone,
     timezoneAutoSync: users.timezoneAutoSync,
-    teamId: users.teamId,
+    lastActiveOrganizationId: users.lastActiveOrganizationId,
     createdAt: users.createdAt,
     updatedAt: users.updatedAt,
   });
@@ -63,27 +63,27 @@ export const updateUser = async (db: Database, data: UpdateUserParams) => {
 };
 
 export const deleteUser = async (db: Database, id: string) => {
-  // Find teams where this user is a member
-  const teamsWithUser = await db
+  // Find organizations where this user is a member
+  const organizationsWithUser = await db
     .select({
-      teamId: usersOnTeam.teamId,
-      memberCount: sql<number>`count(${usersOnTeam.userId})`.as("member_count"),
+      organizationId: users.lastActiveOrganizationId,
+      memberCount: sql<number>`count(${members.userId})`.as("member_count"),
     })
-    .from(usersOnTeam)
-    .where(eq(usersOnTeam.userId, id))
-    .groupBy(usersOnTeam.teamId);
+    .from(members)
+    .where(eq(members.userId, id))
+    .groupBy(members.organizationId);
 
-  // Extract team IDs with only one member (this user)
-  const teamIdsToDelete = teamsWithUser
-    .filter((team) => team.memberCount === 1)
-    .map((team) => team.teamId);
+  // Extract organization IDs with only one member (this user)
+  const organizationIdsToDelete = organizationsWithUser
+    .filter((organization) => organization.memberCount === 1)
+    .map((organization) => organization.organizationId);
 
-  // Delete the user and teams with only this user as a member
+  // Delete the user and organizations with only this user as a member
   // Foreign key constraints with cascade delete will handle related records
   await Promise.all([
     db.delete(users).where(eq(users.id, id)),
-    teamIdsToDelete.length > 0
-      ? db.delete(teams).where(inArray(teams.id, teamIdsToDelete))
+    organizationIdsToDelete.length > 0
+      ? db.delete(organizations).where(inArray(organizations.id, organizationIdsToDelete))
       : Promise.resolve(),
   ]);
 

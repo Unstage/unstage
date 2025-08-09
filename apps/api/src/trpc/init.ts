@@ -1,34 +1,25 @@
-import type { Database } from "@api/db";
-import { connectDb } from "@api/db";
-import { createClient } from "@api/services/supabase";
-import type { Session } from "@api/utils/auth";
-import { verifyAccessToken } from "@api/utils/auth";
-import { getGeoContext } from "@api/utils/geo";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { initTRPC, TRPCError } from "@trpc/server";
+import db, { type Database } from "@unstage/db";
 import type { Context } from "hono";
 import superjson from "superjson";
+import { type Session, verifySessionToken } from "../utils/auth";
+import { getGeoContext } from "../utils/geo";
 import { withPrimaryReadAfterWrite } from "./middleware/primary-read-after-write";
 import { withTeamPermission } from "./middleware/team-permission";
 
 type TRPCContext = {
   session: Session | null;
-  supabase: SupabaseClient;
   db: Database;
   geo: ReturnType<typeof getGeoContext>;
-  teamId?: string;
 };
 
 export const createTRPCContext = async (_: unknown, c: Context): Promise<TRPCContext> => {
-  const accessToken = c.req.header("Authorization")?.split(" ")[1];
-  const session = await verifyAccessToken(accessToken);
-  const supabase = await createClient(accessToken);
-  const db = await connectDb();
+  const sessionToken = c.req.header("Authorization")?.split(" ")[1];
+  const session = await verifySessionToken(sessionToken);
   const geo = getGeoContext(c.req);
 
   return {
     session,
-    supabase,
     db,
     geo,
   };
