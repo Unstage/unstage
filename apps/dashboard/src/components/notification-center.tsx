@@ -27,9 +27,9 @@ export function NotificationCenter() {
     useNotifications();
 
   console.log(notifications);
-  const unreadNotifications = notifications.filter((notification) => !notification.read);
+  const unreadNotifications = notifications.filter((notification) => !notification.isRead);
 
-  const archivedNotifications = notifications.filter((notification) => notification.read);
+  const archivedNotifications = notifications.filter((notification) => notification.isRead);
 
   console.log("unreadNotifications", unreadNotifications);
   console.log("archivedNotifications", archivedNotifications);
@@ -61,7 +61,7 @@ export function NotificationCenter() {
         sideOffset={10}
       >
         <Tabs defaultValue="inbox">
-          <TabsList className="w-full justify-start bg-transparent border-b-[1px] rounded-none py-6">
+          <TabsList className="w-full justify-start bg-transparent border-b-[1px] border-border rounded-none py-6">
             <TabsTrigger value="inbox" className="font-normal">
               Inbox
             </TabsTrigger>
@@ -77,7 +77,7 @@ export function NotificationCenter() {
               className="rounded-full bg-ransparent hover:bg-accent"
               onClick={() => setOpen(false)}
             >
-              <Icons.Settings className="text-[#606060]" size={16} />
+              <Icons.Settings className="text-[#606060] size-4" />
             </Button>
           </Link>
 
@@ -85,7 +85,7 @@ export function NotificationCenter() {
             {!unreadNotifications.length && <EmptyState description="No new notifications" />}
 
             {unreadNotifications.length > 0 && (
-              <ScrollArea className="pb-12 h-[485px]">
+              <ScrollArea className="pb-12 h-[475px]">
                 <div className="divide-y">
                   {unreadNotifications.map((notification) => {
                     return "Hello";
@@ -107,7 +107,7 @@ export function NotificationCenter() {
             )}
 
             {unreadNotifications.length > 0 && (
-              <div className="h-12 w-full absolute bottom-0 flex items-center justify-center border-t-[1px]">
+              <div className="h-12 w-full absolute bottom-0 flex items-center justify-center border-t-[1px] border-border">
                 <Button variant="secondary" className="bg-transparent" onClick={markAllAsRead}>
                   Archive all
                 </Button>
