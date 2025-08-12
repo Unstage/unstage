@@ -20,7 +20,7 @@ const authConfig = {
           return {
             data: {
               ...session,
-              activeOrganizationId: user?.lastActiveOrganizationId,
+              activeOrganizationId: user?.organizationId,
             },
           };
         },
@@ -35,17 +35,13 @@ const authConfig = {
   },
 
   user: {
-    fields: {
-      name: "fullName",
-      image: "avatarUrl",
-    },
     additionalFields: {
       isOnboarded: {
         type: "boolean",
         defaultValue: false,
         input: false,
       },
-      lastActiveOrganizationId: {
+      organizationId: {
         type: "string",
         required: false,
         defaultValue: null,
@@ -111,5 +107,3 @@ const authConfig = {
 } satisfies BetterAuthOptions;
 
 export const auth = betterAuth(authConfig) as ReturnType<typeof betterAuth<typeof authConfig>>;
-
-export type { Session };

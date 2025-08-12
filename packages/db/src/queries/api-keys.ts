@@ -12,7 +12,7 @@ export const getApiKeyByToken = async (db: Database, keyHash: string) => {
       name: apikeys.name,
       keyHash: apikeys.keyHash,
       userId: apikeys.userId,
-      teamId: apikeys.teamId,
+      organizationId: apikeys.organizationId,
       scopes: apikeys.scopes,
       createdAt: apikeys.createdAt,
       expiresAt: apikeys.expiresAt,
@@ -26,7 +26,7 @@ export const getApiKeyByToken = async (db: Database, keyHash: string) => {
   return result;
 };
 
-export const getApiKeysByTeam = async (db: Database, teamId: string) => {
+export const getApiKeysByOrganization = async (db: Database, organizationId: string) => {
   return db
     .select({
       id: apikeys.id,
@@ -37,26 +37,26 @@ export const getApiKeysByTeam = async (db: Database, teamId: string) => {
       lastUsedAt: apikeys.lastUsedAt,
       user: {
         id: users.id,
-        fullName: users.fullName,
+        name: users.name,
         email: users.email,
-        avatarUrl: users.avatarUrl,
+        image: users.image,
       },
     })
     .from(apikeys)
     .leftJoin(users, eq(apikeys.userId, users.id))
-    .where(eq(apikeys.teamId, teamId))
+    .where(eq(apikeys.organizationId, organizationId))
     .orderBy(apikeys.createdAt);
 };
 
 type DeleteApiKeyParams = {
   id: string;
-  teamId: string;
+  organizationId: string;
 };
 
 export const deleteApiKey = async (db: Database, params: DeleteApiKeyParams) => {
   const [result] = await db
     .delete(apikeys)
-    .where(and(eq(apikeys.id, params.id), eq(apikeys.teamId, params.teamId)))
+    .where(and(eq(apikeys.id, params.id), eq(apikeys.organizationId, params.organizationId)))
     .returning({
       keyHash: apikeys.keyHash,
     });

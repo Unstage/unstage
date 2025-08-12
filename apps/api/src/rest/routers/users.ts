@@ -1,8 +1,8 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import { getUserById, updateUser } from "@unstage/db/queries/users";
+import { updateUserSchema, userSchema } from "../../schemas/users";
 import { validateResponse } from "../../utils/validate-response";
 import { withRequiredScope } from "../middleware";
-import { updateUserSchema, userSchema } from "../schemas/users";
 import type { Context } from "../types";
 
 const app = new OpenAPIHono<Context>();

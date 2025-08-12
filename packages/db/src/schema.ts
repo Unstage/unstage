@@ -33,12 +33,12 @@ export const users = pgTable(
   "users",
   {
     id: uuid().defaultRandom().primaryKey().notNull(),
-    fullName: text("full_name"),
+    name: text("name"),
     email: text("email").unique(),
     emailVerified: boolean("email_verified").default(false),
-    avatarUrl: text("avatar_url"),
+    image: text("image"),
     isOnboarded: boolean("is_onboarded").default(false),
-    lastActiveOrganizationId: uuid("last_active_organization_id"),
+    organizationId: uuid("organization_id"),
     locale: text("locale").default("en"),
     timezone: text("timezone"),
     timezoneAutoSync: boolean("timezone_auto_sync").default(true),
@@ -51,9 +51,9 @@ export const users = pgTable(
   (table) => [
     index("users_email_idx").using("btree", table.email.asc().nullsLast()),
     foreignKey({
-      columns: [table.lastActiveOrganizationId],
+      columns: [table.organizationId],
       foreignColumns: [organizations.id],
-      name: "users_last_active_organization_id_fk",
+      name: "users_organization_id_fk",
     }).onDelete("set null"),
   ]
 );

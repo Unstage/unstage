@@ -1,11 +1,11 @@
 import "@unstage/ui/globals.css";
-import { ThemeProvider } from "@components/theme-provider";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactElement } from "react";
+import { Providers } from "./providers";
 import { baseUrl } from "./sitemap";
 
 export const metadata: Metadata = {
@@ -89,14 +89,7 @@ export default function Layout({ children }: { children: ReactElement }) {
     >
       <body className="bg-background overflow-x-hidden font-sans antialiased min-h-screen">
         <NuqsAdapter>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <Providers>{children}</Providers>
         </NuqsAdapter>
       </body>
     </html>

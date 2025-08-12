@@ -19,7 +19,6 @@
     "@trpc/server": "^11.4.4",
     "@unstage/db": "workspace:*",
     "@unstage/email": "workspace:*",
-    "@unstage/trpc": "workspace:*",
     "@unstage/ui": "workspace:*",
     "geist": "^1.4.2",
     "motion": "^12.23.12",

@@ -9,10 +9,10 @@ export const getUserById = async (db: Database, id: string) => {
   const [result] = await db
     .select({
       id: users.id,
-      fullName: users.fullName,
+      name: users.name,
       email: users.email,
       emailVerified: users.emailVerified,
-      avatarUrl: users.avatarUrl,
+      image: users.image,
       locale: users.locale,
       isOnboarded: users.isOnboarded,
       role: users.role,
@@ -20,7 +20,7 @@ export const getUserById = async (db: Database, id: string) => {
       updatedAt: users.updatedAt,
       timezone: users.timezone,
       timezoneAutoSync: users.timezoneAutoSync,
-      lastActiveOrganizationId: users.lastActiveOrganizationId,
+      organizationId: users.organizationId,
       organization: {
         id: organizations.id,
         name: organizations.name,
@@ -30,7 +30,7 @@ export const getUserById = async (db: Database, id: string) => {
       },
     })
     .from(users)
-    .leftJoin(organizations, eq(users.lastActiveOrganizationId, organizations.id))
+    .leftJoin(organizations, eq(users.organizationId, organizations.id))
     .where(eq(users.id, id));
 
   return result ?? null;
@@ -45,16 +45,16 @@ export const updateUser = async (db: Database, data: UpdateUserParams) => {
 
   const [result] = await db.update(users).set(updateData).where(eq(users.id, id)).returning({
     id: users.id,
-    fullName: users.fullName,
+    name: users.name,
     email: users.email,
     emailVerified: users.emailVerified,
-    avatarUrl: users.avatarUrl,
+    image: users.image,
     locale: users.locale,
     isOnboarded: users.isOnboarded,
     role: users.role,
     timezone: users.timezone,
     timezoneAutoSync: users.timezoneAutoSync,
-    lastActiveOrganizationId: users.lastActiveOrganizationId,
+    organizationId: users.organizationId,
     createdAt: users.createdAt,
     updatedAt: users.updatedAt,
   });
@@ -66,7 +66,7 @@ export const deleteUser = async (db: Database, id: string) => {
   // Find organizations where this user is a member
   const organizationsWithUser = await db
     .select({
-      organizationId: users.lastActiveOrganizationId,
+      organizationId: users.organizationId,
       memberCount: sql<number>`count(${members.userId})`.as("member_count"),
     })
     .from(members)

@@ -5,6 +5,8 @@ import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
 import { routers } from "./rest/routers";
 import type { Context } from "./rest/types";
+import { createTRPCContext } from "./trpc/init";
+import { appRouter } from "./trpc/routers/_app";
 import { checkHealth } from "./utils/health";
 
 const app = new OpenAPIHono<Context>();
@@ -25,18 +27,19 @@ app.use(
       "x-user-timezone",
       "x-user-country",
     ],
+    credentials: true,
     exposeHeaders: ["Content-Length"],
     maxAge: 86400,
   })
 );
 
-// app.use(
-//   "/trpc/*",
-//   trpcServer({
-//     router: appRouter,
-//     createContext: createTRPCContext,
-//   })
-// );
+app.use(
+  "/trpc/*",
+  trpcServer({
+    router: appRouter,
+    createContext: createTRPCContext,
+  })
+);
 
 app.get("/health", async (c) => {
   try {

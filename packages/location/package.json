@@ -1,0 +1,22 @@
+{
+  "name": "@unstage/location",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.4",
+    "@unstage/typescript-config": "workspace:*",
+    "@types/node": "^24.2.1",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "next": "^15.4.6"
+  }
+}
