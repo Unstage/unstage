@@ -2,7 +2,6 @@
 
 import { useNotifications } from "@hooks/use-notifications";
 import { Button } from "@unstage/ui/components/button";
-// import { EmptyState } from "@unstage/ui/components/empty-state";
 import { Icons } from "@unstage/ui/components/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@unstage/ui/components/popover";
 import { ScrollArea } from "@unstage/ui/components/scroll-area";
@@ -23,23 +22,18 @@ function EmptyState({ description }: { description: string }) {
 
 export function NotificationCenter() {
   const [isOpen, setOpen] = useState(false);
-  const { hasUnseenNotifications, notifications, markAsRead, markAllAsSeen, markAllAsRead } =
+  const { hasUnseenNotifications, notifications, markAllAsSeen, markAllAsRead } =
     useNotifications();
 
-  console.log(notifications);
   const unreadNotifications = notifications.filter((notification) => !notification.isRead);
 
   const archivedNotifications = notifications.filter((notification) => notification.isRead);
 
-  console.log("unreadNotifications", unreadNotifications);
-  console.log("archivedNotifications", archivedNotifications);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Hook function
   useEffect(() => {
     if (isOpen && hasUnseenNotifications) {
       markAllAsSeen();
     }
-  }, [hasUnseenNotifications, isOpen]);
+  }, [hasUnseenNotifications, isOpen, markAllAsSeen]);
 
   return (
     <Popover onOpenChange={setOpen} open={isOpen}>

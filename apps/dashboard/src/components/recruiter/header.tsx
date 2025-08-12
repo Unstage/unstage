@@ -3,7 +3,7 @@
 // import { MobileMenu } from "./mobile-menu";
 import { NotificationCenter } from "@components/notification-center";
 import { OpenSearchButton } from "@components/search/open-search-button";
-// import { Trial } from "@/components/trial";
+import { Trial } from "@components/trial";
 import { UserMenu } from "@components/user-menu";
 
 export function Header() {
@@ -14,8 +14,8 @@ export function Header() {
       <OpenSearchButton />
 
       <div className="flex space-x-2 ml-auto">
-        {/* <Trial />
-        <ConnectionStatus /> */}
+        <Trial />
+        {/*<ConnectionStatus /> */}
         <NotificationCenter />
         <UserMenu />
       </div>

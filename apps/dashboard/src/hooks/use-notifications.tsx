@@ -1,7 +1,7 @@
 "use client";
 
 import { type Notification, Novu } from "@novu/js";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useUserQuery } from "./use-user";
 
 export function useNotifications() {
@@ -10,29 +10,29 @@ export function useNotifications() {
   const novuRef = useRef<Novu | null>(null);
   const { data: user } = useUserQuery();
 
-  const markAsRead = async (notificationId: string) => {
+  const markAsRead = useCallback(async (notificationId: string) => {
     if (!novuRef.current) return;
     await novuRef.current.notifications.read({
       notificationId,
     });
-  };
+  }, []);
 
-  const markAllAsRead = async () => {
+  const markAllAsRead = useCallback(async () => {
     if (!novuRef.current) return;
     await novuRef.current.notifications.readAll();
-  };
+  }, []);
 
-  const markAsSeen = async (notificationId: string) => {
+  const markAsSeen = useCallback(async (notificationId: string) => {
     if (!novuRef.current) return;
     await novuRef.current.notifications.seen({
       notificationId,
     });
-  };
+  }, []);
 
-  const markAllAsSeen = async () => {
+  const markAllAsSeen = useCallback(async () => {
     if (!novuRef.current) return;
     await novuRef.current.notifications.seenAll();
-  };
+  }, []);
 
   useEffect(() => {
     const subscriberId = `${user?.organizationId}_${user?.id}`;
