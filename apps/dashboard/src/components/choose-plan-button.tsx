@@ -17,7 +17,7 @@ export function ChoosePlanButton({
   hasDiscount?: boolean;
   discountPrice?: number;
 }) {
-  const [isOpen, setIsOpen] = useState(initialIsOpen ?? false);
+  const [_, setIsOpen] = useState(initialIsOpen ?? false);
 
   return (
     <>
