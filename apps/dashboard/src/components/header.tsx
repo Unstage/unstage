@@ -6,7 +6,7 @@ interface HeaderProps {
   logoOnly?: boolean;
 }
 
-export default function Header({ logoOnly = false }: HeaderProps) {
+export function Header({ logoOnly = false }: HeaderProps) {
   return (
     <header className="flex justify-between items-center mt-4 px-8 w-full">
       <Link href="/">

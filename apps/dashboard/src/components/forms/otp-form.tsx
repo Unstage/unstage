@@ -29,7 +29,7 @@ const otpFormSchema = z.object({
   otp: z.string().length(6),
 });
 
-export default function OtpForm({ email }: OtpFormProps) {
+export function OtpForm({ email }: OtpFormProps) {
   const router = useRouter();
   const form = useZodForm(otpFormSchema, {
     defaultValues: {

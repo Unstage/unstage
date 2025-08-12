@@ -1,6 +1,6 @@
-import OtpSignIn from "@components/otp-sign-in";
-import SignInFooter from "@components/sign-in-footer";
-import SocialSignIn from "@components/social-sign-in";
+import { OtpSignIn } from "@components/otp-sign-in";
+import { SignInFooter } from "@components/sign-in-footer";
+import { SocialSignIn } from "@components/social-sign-in";
 
 export default function SignIn() {
   return (

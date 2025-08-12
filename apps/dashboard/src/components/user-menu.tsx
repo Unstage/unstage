@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@unstage/ui/components/dropdown-menu";
 import Link from "next/link";
-// import { SignOut } from "./sign-out";
+import { SignOut } from "./sign-out";
 import { ThemeSwitch } from "./theme-switch";
 
 type Props = {
@@ -35,8 +35,8 @@ export function UserMenu({ onlySignOut }: Props) {
               quality={100}
             />
           )}
-          <AvatarFallback>
-            <span className="text-xs">{user?.name?.charAt(0)?.toUpperCase()}</span>
+          <AvatarFallback className="bg-muted">
+            <span className="text-sm font-semibold">{user?.name?.charAt(0)?.toUpperCase()}</span>
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -77,7 +77,7 @@ export function UserMenu({ onlySignOut }: Props) {
           </>
         )}
 
-        {/* <SignOut /> */}
+        <SignOut />
       </DropdownMenuContent>
     </DropdownMenu>
   );

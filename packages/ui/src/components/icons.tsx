@@ -1,3 +1,4 @@
+import { ArchiveIcon } from "@radix-ui/react-icons";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -11,10 +12,15 @@ import {
 } from "lucide-react";
 import type * as React from "react";
 import {
+  MdArrowDownward,
+  MdArrowUpward,
   MdCode,
   MdDashboard,
   MdExpandMore,
   MdOutlineAdd,
+  MdOutlineNotificationsNone,
+  MdSearch,
+  MdSubdirectoryArrowLeft,
   MdSupervisorAccount,
 } from "react-icons/md";
 
@@ -113,6 +119,8 @@ export const Icons = {
     </SVGIcon>
   ),
   Add: MdOutlineAdd,
+  ArrowDownward: MdArrowDownward,
+  ArrowUpward: MdArrowUpward,
   ArrowRight,
   ArrowUpRight,
   Candidates: MdSupervisorAccount,
@@ -120,10 +128,14 @@ export const Icons = {
   Code: MdCode,
   Dashboard: MdDashboard,
   GalleryVerticalEnd,
+  Inbox: ArchiveIcon,
   LifeBuoy,
   Menu,
   Monitor,
   Moon,
   MoveRight,
+  Notifications: MdOutlineNotificationsNone,
+  Search: MdSearch,
+  SubdirectoryArrowLeft: MdSubdirectoryArrowLeft,
   Sun,
 };

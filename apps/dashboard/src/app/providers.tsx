@@ -1,3 +1,5 @@
+"use client";
+
 import { TRPCReactProvider } from "@src/trpc/client";
 import { ThemeProvider } from "next-themes";
 

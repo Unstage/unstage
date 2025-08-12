@@ -17,7 +17,7 @@ const setupSchema = z.object({
   fullName: z.string().min(1),
 });
 
-export default function SetupForm() {
+export function SetupForm() {
   const form = useZodForm(setupSchema, {
     defaultValues: {
       fullName: "",

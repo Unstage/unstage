@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import EmailForm from "./forms/email-form";
-import OtpForm from "./forms/otp-form";
+import { EmailForm } from "./forms/email-form";
+import { OtpForm } from "./forms/otp-form";
 
-export default function OtpSignIn() {
+export function OtpSignIn() {
   const [email, setEmail] = useState<string>("");
 
   if (email) {

@@ -14,7 +14,7 @@ const emailFormSchema = z.object({
   email: z.email({ error: "Please enter a valid email address." }),
 });
 
-export default function EmailForm({ onSubmit }: { onSubmit: (email: string) => void }) {
+export function EmailForm({ onSubmit }: { onSubmit: (email: string) => void }) {
   const form = useZodForm(emailFormSchema, {
     defaultValues: {
       email: "",

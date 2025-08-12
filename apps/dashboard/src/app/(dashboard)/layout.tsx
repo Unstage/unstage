@@ -1,3 +1,4 @@
+import { GlobalOverlays } from "@components/overlays/global-overlays";
 import { Header } from "@components/recruiter/header";
 import { Sidebar } from "@components/recruiter/sidebar";
 import { getQueryClient, HydrateClient, trpc } from "../../trpc/server";
@@ -17,6 +18,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
           <Header />
           <div className="px-6">{children}</div>
         </div>
+
+        <GlobalOverlays />
       </div>
     </HydrateClient>
   );

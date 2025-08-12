@@ -1,7 +1,7 @@
 import { Button } from "@unstage/ui/components/button";
 import { Icons } from "@unstage/ui/components/icons";
 
-export default function SocialSignIn() {
+export function SocialSignIn() {
   return (
     <>
       <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
