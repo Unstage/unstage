@@ -67,6 +67,9 @@ export const deleteApiKey = async (db: Database, params: DeleteApiKeyParams) => 
 export const updateApiKeyLastUsedAt = async (db: Database, id: string) => {
   return await db
     .update(apikeys)
-    .set({ lastUsedAt: new Date().toISOString() })
-    .where(eq(apikeys.id, id));
+    .set({ lastUsedAt: new Date() })
+    .where(eq(apikeys.id, id))
+    .returning({
+      lastUsedAt: apikeys.lastUsedAt,
+    });
 };

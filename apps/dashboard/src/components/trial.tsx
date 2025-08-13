@@ -2,7 +2,7 @@
 
 import { UTCDate } from "@date-fns/utc";
 import { useUserQuery } from "@hooks/use-user";
-import { addDays, differenceInDays, isSameDay, parseISO } from "date-fns";
+import { addDays, differenceInDays, isSameDay } from "date-fns";
 import { ChoosePlanButton } from "./choose-plan-button";
 import { FeedbackForm } from "./forms/feedback-form";
 
@@ -19,8 +19,7 @@ export function Trial() {
     return <FeedbackForm />;
   }
 
-  // Parse dates using UTCDate for consistent timezone handling
-  const rawCreatedAt = parseISO(team.createdAt);
+  const rawCreatedAt = new Date(team.createdAt);
   const today = new UTCDate();
 
   // Convert to UTCDate for consistent calculation

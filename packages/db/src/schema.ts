@@ -43,10 +43,8 @@ export const users = pgTable(
     timezone: text("timezone"),
     timezoneAutoSync: boolean("timezone_auto_sync").default(true),
     role: rolesEnum("role"),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     index("users_email_idx").using("btree", table.email.asc().nullsLast()),
@@ -63,8 +61,8 @@ export const sessions = pgTable("sessions", {
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
   activeOrganizationId: uuid("active_organization_id"),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: uuid("user_id")
@@ -86,8 +84,8 @@ export const accounts = pgTable("accounts", {
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   scope: text("scope"),
   password: text("password"),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
 });
 
 export const verifications = pgTable("verifications", {
@@ -95,8 +93,8 @@ export const verifications = pgTable("verifications", {
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
 });
 
 export const organizations = pgTable("organizations", {
@@ -104,8 +102,8 @@ export const organizations = pgTable("organizations", {
   name: text("name"),
   slug: text("slug").unique(),
   logoUrl: text("logo_url"),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
   plan: plansEnum().default("trial").notNull(),
 });
 
@@ -118,7 +116,7 @@ export const members = pgTable(
     role: memberRolesEnum().default("member").notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
-      mode: "string",
+      mode: "date",
     }).defaultNow(),
   },
   (table) => [
@@ -149,10 +147,8 @@ export const organizationInvites = pgTable(
     organizationId: uuid("organization_id").notNull(),
     role: memberRolesEnum().default("member").notNull(),
     status: organizationInviteStatusEnum().default("pending").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .defaultNow()
-      .notNull(),
-    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     index("organization_invites_email_idx").using("btree", table.email.asc()),
@@ -177,15 +173,13 @@ export const interview = pgTable(
   "interviews",
   {
     id: uuid().defaultRandom().primaryKey().notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
     title: text(),
     description: text(),
     status: interviewStatusEnum(),
-    startAt: timestamp("start_at", { withTimezone: true, mode: "string" }),
-    endAt: timestamp("end_at", { withTimezone: true, mode: "string" }),
+    startAt: timestamp("start_at", { withTimezone: true, mode: "date" }),
+    endAt: timestamp("end_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [index("interviews_id_idx").using("btree", table.id.asc().nullsLast().op("uuid_ops"))]
 );
@@ -196,10 +190,8 @@ export const interviewParticipants = pgTable(
     id: uuid().defaultRandom().primaryKey().notNull(),
     interviewId: uuid("interview_id").notNull(),
     userId: uuid("user_id").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     index("interview_participants_interview_id_idx").using(
@@ -230,8 +222,8 @@ export const interviewInvites = pgTable(
     email: text("email").notNull(),
     interviewId: uuid("interview_id").notNull(),
     verificationId: uuid("verification_id").notNull(),
-    sentAt: timestamp("sent_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-    acceptedAt: timestamp("accepted_at", { withTimezone: true, mode: "string" }),
+    sentAt: timestamp("sent_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     index("interview_invites_email_idx").using("btree", table.email.asc()),
@@ -257,12 +249,10 @@ export const apikeys = pgTable(
     userId: uuid("user_id").notNull(),
     organizationId: uuid("organization_id"),
     scopes: text("scopes").array(),
-    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "string" }),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .defaultNow()
-      .notNull(),
-    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "string" }),
-    lastUsedAt: timestamp("last_used_at", { withTimezone: true, mode: "string" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+    lastUsedAt: timestamp("last_used_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     index("apikeys_key_hash_idx").using("btree", table.keyHash.asc().nullsLast()),

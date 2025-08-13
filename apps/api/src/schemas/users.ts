@@ -13,6 +13,10 @@ export const updateUserSchema = z.object({
     description: "URL of the user's avatar",
     example: "https://example.com/avatar.png",
   }),
+  isOnboarded: z.boolean().optional().openapi({
+    description: "Whether the user has completed onboarding",
+    example: true,
+  }),
   organizationId: z.string().optional().openapi({
     description: "Unique identifier of the organization the user belongs to",
     example: "organization-abc123",

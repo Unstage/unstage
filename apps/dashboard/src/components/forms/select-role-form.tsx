@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserMutation } from "@hooks/use-user";
 import { useZodForm } from "@hooks/use-zod-form";
 import { Button } from "@unstage/ui/components/button";
 import {
@@ -20,28 +21,23 @@ const selectRoleSchema = z.object({
 });
 
 export function SelectRoleForm() {
+  const updateUserMutation = useUserMutation();
+
+  const onSubmit = (values: z.infer<typeof selectRoleSchema>) => {
+    updateUserMutation.mutate({
+      role: values.role,
+    });
+  };
+
   const form = useZodForm(selectRoleSchema, {
     defaultValues: {
       role: "recruiter",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof selectRoleSchema>) => {
-    console.log(values);
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex justify-between items-end gap-4">
-          {/* <AvatarUpload
-            userId={user?.id ?? ""}
-            avatarUrl={user?.avatarUrl}
-            size={80}
-            ref={uploadRef}
-          /> */}
-        </div>
-
         <FormField
           control={form.control}
           name="role"
@@ -55,40 +51,38 @@ export function SelectRoleForm() {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value}
-                  className="flex gap-6 font-display"
+                  className="flex gap-6 font-display md:flex-row flex-col"
                 >
-                  <div
+                  <Label
                     className={cn(
-                      "flex flex-col gap-2 border border-border p-6 w-[250px]",
+                      "flex flex-col gap-2 border border-border p-6 md:w-[250px] w-full cursor-pointer",
                       field.value === "recruiter" && "border-input bg-muted/40"
                     )}
+                    htmlFor="recruiter"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
                       <RadioGroupItem value="recruiter" id="recruiter" />
-                      <Label htmlFor="recruiter" className="text-lg">
-                        Hiring manager
-                      </Label>
+                      <p className="text-lg">Hiring manager</p>
                     </div>
                     <FormDescription className="text-muted-foreground">
                       I'm a hiring manager looking to improve my hiring process.
                     </FormDescription>
-                  </div>
-                  <div
+                  </Label>
+                  <Label
                     className={cn(
-                      "flex flex-col gap-2 border border-border p-6 w-[250px]",
+                      "flex flex-col gap-2 border border-border p-6 md:w-[250px] w-full cursor-pointer",
                       field.value === "candidate" && "border-input bg-muted/40"
                     )}
+                    htmlFor="candidate"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
                       <RadioGroupItem value="candidate" id="candidate" />
-                      <Label htmlFor="candidate" className="text-lg">
-                        Software engineer
-                      </Label>
+                      <p className="text-lg">Software engineer</p>
                     </div>
                     <FormDescription className="text-muted-foreground">
                       I'm a software engineer looking to sharpen my skills.
                     </FormDescription>
-                  </div>
+                  </Label>
                 </RadioGroup>
               </FormControl>
             </FormItem>

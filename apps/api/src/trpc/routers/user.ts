@@ -1,5 +1,5 @@
+import { updateUserSchema } from "@schemas/users";
 import { getUserById, updateUser } from "@unstage/db/queries/users";
-import { updateUserSchema } from "@/schemas/users";
 import { createTRPCRouter, protectedProcedure } from "../init";
 
 export const userRouter = createTRPCRouter({

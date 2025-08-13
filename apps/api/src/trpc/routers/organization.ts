@@ -1,6 +1,7 @@
+import { createOrganizationSchema } from "@schemas/organizations";
 import { TRPCError } from "@trpc/server";
 import { getOrganizationsByUserId } from "@unstage/db/queries/members";
-import { getOrganizationById } from "@unstage/db/queries/organizations";
+import { createOrganization, getOrganizationById } from "@unstage/db/queries/organizations";
 import { createTRPCRouter, protectedProcedure } from "../init";
 
 export const organizationRouter = createTRPCRouter({
@@ -15,4 +16,13 @@ export const organizationRouter = createTRPCRouter({
   list: protectedProcedure.query(async ({ ctx: { db, user } }) => {
     return getOrganizationsByUserId(db, user.id);
   }),
+
+  create: protectedProcedure
+    .input(createOrganizationSchema)
+    .mutation(async ({ ctx: { db, user }, input }) => {
+      return createOrganization(db, {
+        ...input,
+        userId: user.id,
+      });
+    }),
 });

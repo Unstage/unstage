@@ -50,7 +50,6 @@ const authConfig = {
       role: {
         type: "string",
         required: false,
-        defaultValue: "candidate",
         input: false,
       },
       locale: {

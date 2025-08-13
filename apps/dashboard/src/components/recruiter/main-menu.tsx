@@ -25,11 +25,11 @@ const items = [
     path: "/interviews",
     name: "Interviews",
     children: [
-      { path: "/interviews?statuses=scheduled", name: "Scheduled" },
-      { path: "/interviews?statuses=completed", name: "Completed" },
-      { path: "/interviews?statuses=cancelled", name: "Cancelled" },
-      { path: "/interviews?statuses=pending", name: "Pending" },
-      { path: "/interviews?statuses=rescheduled", name: "Rescheduled" },
+      { path: "/interviews?statuses=scheduled", name: "Draft" },
+      { path: "/interviews?statuses=completed", name: "Scheduled" },
+      { path: "/interviews?statuses=cancelled", name: "Completed" },
+      { path: "/interviews?statuses=pending", name: "Cancelled" },
+      { path: "/interviews?statuses=rescheduled", name: "Create new" },
     ],
   },
   {

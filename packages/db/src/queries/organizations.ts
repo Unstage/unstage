@@ -1,5 +1,5 @@
 import type { Database } from "@unstage/db";
-import { organizations } from "@unstage/db/schema";
+import { members, organizations, users } from "@unstage/db/schema";
 import type { InferSelectModel } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 
@@ -24,4 +24,38 @@ export const updateOrganizationById = async (db: Database, params: UpdateOrganiz
     .returning();
 
   return result;
+};
+
+type CreateOrganizationParams = {
+  name: string;
+  userId: string;
+};
+
+export const createOrganization = async (db: Database, params: CreateOrganizationParams) => {
+  const { name, userId } = params;
+
+  return db.transaction(async (tx) => {
+    const [newOrganization] = await tx
+      .insert(organizations)
+      .values({ name })
+      .returning({ id: organizations.id });
+
+    if (!newOrganization) {
+      throw new Error("Failed to create organization");
+    }
+    await tx.insert(members).values({
+      userId,
+      organizationId: newOrganization.id,
+      role: "owner",
+    });
+
+    await tx
+      .update(users)
+      .set({
+        organizationId: newOrganization.id,
+      })
+      .where(eq(users.id, userId));
+
+    return newOrganization.id;
+  });
 };

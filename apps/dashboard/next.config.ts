@@ -2,6 +2,7 @@
 const nextConfig = {
   experimental: {
     optimizePackageImports: ["@unstage/ui"],
+    nodeMiddleware: true,
   },
   transpilePackages: [
     "@unstage/ui",

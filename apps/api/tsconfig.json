@@ -6,7 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@schemas/*": ["./src/schemas/*"]
     }
   },
   "include": ["src/**/*", "../../packages/cache/src/user-cache.ts"],

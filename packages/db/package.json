@@ -5,7 +5,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./schema": "./src/schema.ts",
-    "./queries/*": "./src/queries/*.ts"
+    "./queries/*": "./src/queries/*.ts",
+    "./utils/*": "./src/utils/*.ts"
   },
   "scripts": {
     "db:push": "drizzle-kit push --config=./drizzle.config.ts",
@@ -17,9 +18,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.1",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.4",
+    "postgres": "^3.4.7",
     "zod": "^4.0.15"
   },
   "devDependencies": {

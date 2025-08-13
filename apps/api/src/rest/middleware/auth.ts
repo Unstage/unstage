@@ -65,7 +65,7 @@ export const withAuth: MiddlewareHandler = async (c, next) => {
   }
 
   const session = {
-    teamId: apiKey.teamId,
+    organizationId: apiKey.organizationId,
     user: {
       id: user.id,
       email: user.email,
@@ -74,7 +74,7 @@ export const withAuth: MiddlewareHandler = async (c, next) => {
   };
 
   c.set("session", session);
-  c.set("teamId", session.teamId);
+  c.set("organizationId", session.organizationId);
   c.set("scopes", expandScopes(apiKey.scopes ?? []));
 
   // Update last used at
