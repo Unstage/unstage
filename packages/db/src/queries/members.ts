@@ -1,6 +1,6 @@
 import type { Database } from "@unstage/db";
 import { members, organizations } from "@unstage/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export async function getOrganizationsByUserId(db: Database, userId: string) {
   const result = await db
@@ -37,4 +37,19 @@ export async function getOrganizationsByUserId(db: Database, userId: string) {
     createdAt: row.organization?.createdAt,
     updatedAt: row.organization?.updatedAt,
   }));
+}
+
+export async function getOrganizationRoleByUserId(
+  db: Database,
+  userId: string,
+  organizationId: string
+) {
+  const [result] = await db
+    .select({
+      role: members.role,
+    })
+    .from(members)
+    .where(and(eq(members.userId, userId), eq(members.organizationId, organizationId)));
+
+  return result?.role;
 }

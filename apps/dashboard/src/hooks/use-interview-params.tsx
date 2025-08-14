@@ -1,9 +1,9 @@
 import { useQueryStates } from "nuqs";
-import { createLoader, parseAsString, parseAsStringEnum } from "nuqs/server";
+import { createLoader, parseAsBoolean, parseAsString } from "nuqs/server";
 
 const interviewParamsSchema = {
   selectedCandidateId: parseAsString,
-  type: parseAsStringEnum(["edit", "create", "details"]),
+  create: parseAsBoolean,
   interviewId: parseAsString,
 };
 

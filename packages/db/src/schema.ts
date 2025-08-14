@@ -2,6 +2,7 @@ import {
   boolean,
   foreignKey,
   index,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -27,6 +28,14 @@ export const interviewStatusEnum = pgEnum("interviewStatus", [
   "scheduled",
   "completed",
   "cancelled",
+]);
+
+export const interviewModeEnum = pgEnum("interviewMode", ["async", "live"]);
+
+export const interviewRunStatusEnum = pgEnum("interviewRunStatus", [
+  "started",
+  "completed",
+  "abandoned",
 ]);
 
 export const users = pgTable(
@@ -169,48 +178,54 @@ export const organizationInvites = pgTable(
   ]
 );
 
-export const interview = pgTable(
+export const interviews = pgTable(
   "interviews",
   {
     id: uuid().defaultRandom().primaryKey().notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
+    organizationId: uuid("organization_id").notNull(),
+    ownerId: uuid("owner_id").notNull(),
     title: text(),
     description: text(),
-    status: interviewStatusEnum(),
-    startAt: timestamp("start_at", { withTimezone: true, mode: "date" }),
-    endAt: timestamp("end_at", { withTimezone: true, mode: "date" }),
-  },
-  (table) => [index("interviews_id_idx").using("btree", table.id.asc().nullsLast().op("uuid_ops"))]
-);
-
-export const interviewParticipants = pgTable(
-  "interview_participants",
-  {
-    id: uuid().defaultRandom().primaryKey().notNull(),
-    interviewId: uuid("interview_id").notNull(),
-    userId: uuid("user_id").notNull(),
+    status: interviewStatusEnum().default("draft").notNull(),
+    mode: interviewModeEnum().default("async").notNull(),
+    timeLimitMinutes: integer("time_limit_minutes"),
+    candidateEmail: text("candidate_email"),
+    candidateName: text("candidate_name"),
+    candidateUserId: uuid("candidate_user_id"), // nullable link if they have an account
+    asyncInterviewDeadlineAt: timestamp("async_interview_deadline_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    liveInterviewStartsAt: timestamp("live_interview_starts_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    scenarioVersionId: uuid("scenario_version_id"),
+    publishedAt: timestamp("published_at", { withTimezone: true, mode: "date" }),
+    archivedAt: timestamp("archived_at", { withTimezone: true, mode: "date" }),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
-    index("interview_participants_interview_id_idx").using(
+    index("interviews_id_idx").using("btree", table.id.asc().nullsLast().op("uuid_ops")),
+    index("interviews_organization_id_idx").using(
       "btree",
-      table.interviewId.asc().nullsLast().op("uuid_ops")
-    ),
-    index("interview_participants_user_id_idx").using(
-      "btree",
-      table.userId.asc().nullsLast().op("uuid_ops")
+      table.organizationId.asc().nullsLast().op("uuid_ops")
     ),
     foreignKey({
-      columns: [table.interviewId],
-      foreignColumns: [interview.id],
-      name: "interview_participants_interview_id_fk",
+      columns: [table.organizationId],
+      foreignColumns: [organizations.id],
+      name: "interviews_organization_id_fk",
     }).onDelete("cascade"),
     foreignKey({
-      columns: [table.userId],
+      columns: [table.ownerId],
       foreignColumns: [users.id],
-      name: "interview_participants_user_id_fk",
+      name: "interviews_owner_id_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.candidateUserId],
+      foreignColumns: [users.id],
+      name: "interviews_candidate_user_id_fk",
     }).onDelete("cascade"),
   ]
 );
@@ -219,23 +234,58 @@ export const interviewInvites = pgTable(
   "interview_invites",
   {
     id: uuid().defaultRandom().primaryKey().notNull(),
-    email: text("email").notNull(),
     interviewId: uuid("interview_id").notNull(),
     verificationId: uuid("verification_id").notNull(),
     sentAt: timestamp("sent_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
     acceptedAt: timestamp("accepted_at", { withTimezone: true, mode: "date" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
-    index("interview_invites_email_idx").using("btree", table.email.asc()),
+    index("interview_invites_interview_id_idx").using(
+      "btree",
+      table.interviewId.asc().nullsLast().op("uuid_ops")
+    ),
     foreignKey({
       columns: [table.interviewId],
-      foreignColumns: [interview.id],
+      foreignColumns: [interviews.id],
       name: "interview_invites_interview_id_fk",
     }).onDelete("cascade"),
     foreignKey({
       columns: [table.verificationId],
       foreignColumns: [verifications.id],
       name: "interview_invites_verification_id_fk",
+    }).onDelete("cascade"),
+  ]
+);
+
+export const interviewRuns = pgTable(
+  "interview_runs",
+  {
+    id: uuid().defaultRandom().primaryKey().notNull(),
+    interviewId: uuid("interview_id").notNull(),
+    candidateUserId: uuid("candidate_user_id").notNull(),
+    status: interviewRunStatusEnum().default("started").notNull(),
+    startedAt: timestamp("started_at", { withTimezone: true, mode: "date" }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true, mode: "date" }),
+    durationSeconds: integer("duration_seconds"),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+  },
+  (table) => [
+    index("interview_runs_interview_id_idx").using(
+      "btree",
+      table.interviewId.asc().nullsLast().op("uuid_ops")
+    ),
+    foreignKey({
+      columns: [table.interviewId],
+      foreignColumns: [interviews.id],
+      name: "interview_runs_interview_id_fk",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.candidateUserId],
+      foreignColumns: [users.id],
+      name: "interview_runs_candidate_user_id_fk",
     }).onDelete("cascade"),
   ]
 );

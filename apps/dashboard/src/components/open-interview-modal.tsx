@@ -9,7 +9,7 @@ export function OpenInterviewModal() {
 
   return (
     <div>
-      <Button variant="outline" size="icon" onClick={() => setParams({ type: "create" })}>
+      <Button variant="outline" size="icon" onClick={() => setParams({ create: true })}>
         <Icons.Add />
       </Button>
     </div>
