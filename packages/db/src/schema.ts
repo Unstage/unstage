@@ -25,7 +25,7 @@ export const organizationInviteStatusEnum = pgEnum("organizationInviteStatus", [
 
 export const interviewStatusEnum = pgEnum("interviewStatus", [
   "draft",
-  "scheduled",
+  "published",
   "completed",
   "cancelled",
 ]);

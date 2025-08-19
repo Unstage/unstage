@@ -6,7 +6,8 @@
       "@components/*": ["./src/components/*.tsx"],
       "@hooks/*": ["./src/hooks/*.tsx"],
       "@src/*": ["./src/*.tsx"],
-      "@store/*": ["./src/store/*.ts"]
+      "@store/*": ["./src/store/*.ts"],
+      "@utils/*": ["./src/utils/*.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

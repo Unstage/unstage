@@ -55,7 +55,7 @@ export function NotificationCenter() {
         sideOffset={10}
       >
         <Tabs defaultValue="inbox">
-          <TabsList className="w-full justify-start bg-transparent border-b-[1px] border-border rounded-none py-6">
+          <TabsList className="w-full justify-start py-6 px-2 border-b-[1px] border-border">
             <TabsTrigger value="inbox" className="font-normal">
               Inbox
             </TabsTrigger>
@@ -66,9 +66,9 @@ export function NotificationCenter() {
 
           <Link href="/settings/notifications" className="absolute right-[11px] top-1.5">
             <Button
-              variant="secondary"
+              variant="ghost"
               size="icon"
-              className="rounded-full bg-ransparent hover:bg-accent"
+              className="rounded-full hover:bg-accent"
               onClick={() => setOpen(false)}
             >
               <Icons.Settings className="text-[#606060] size-4" />

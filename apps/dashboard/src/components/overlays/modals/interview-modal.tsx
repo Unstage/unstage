@@ -1,6 +1,6 @@
 "use client";
 
-import { InterviewForm } from "@components/forms/interview-form";
+import { CreateInterviewForm } from "@components/forms/create-interview-form";
 import { useInterviewParams } from "@hooks/use-interview-params";
 import {
   Dialog,
@@ -11,8 +11,7 @@ import {
 } from "@unstage/ui/components/dialog";
 
 export function InterviewModal() {
-  const { setParams, create, interviewId } = useInterviewParams();
-  console.log(create, interviewId);
+  const { setParams, create } = useInterviewParams();
 
   return (
     <Dialog open={create ?? false} onOpenChange={() => setParams(null)}>
@@ -25,7 +24,7 @@ export function InterviewModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <InterviewForm />
+        <CreateInterviewForm />
       </DialogContent>
     </Dialog>
   );

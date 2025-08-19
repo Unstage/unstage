@@ -3,8 +3,8 @@
 import { useZodForm } from "@hooks/use-zod-form";
 import { useTRPC } from "@src/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@unstage/ui/components/button";
-import { Calendar } from "@unstage/ui/components/calendar";
+// import { Button } from "@unstage/ui/components/button";
+// import { Calendar } from "@unstage/ui/components/calendar";
 import {
   Form,
   FormControl,
@@ -15,40 +15,36 @@ import {
 } from "@unstage/ui/components/form";
 import { Icons } from "@unstage/ui/components/icons";
 import { Input } from "@unstage/ui/components/input";
-import { Label } from "@unstage/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@unstage/ui/components/popover";
-import { RadioGroup, RadioGroupItem } from "@unstage/ui/components/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@unstage/ui/components/select";
+// import { Label } from "@unstage/ui/components/label";
+// import { Popover, PopoverContent, PopoverTrigger } from "@unstage/ui/components/popover";
+// import { RadioGroup, RadioGroupItem } from "@unstage/ui/components/radio-group";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@unstage/ui/components/select";
 import { SubmitButton } from "@unstage/ui/components/submit-button";
-import { cn } from "@unstage/ui/lib/utils";
-import { format } from "date-fns";
+import { Textarea } from "@unstage/ui/components/textarea";
+// import { cn } from "@unstage/ui/lib/utils";
+// import { combineDateAndTime } from "@utils/time";
+// import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 
 const interviewSchema = z.object({
   title: z.string().min(2).max(48),
-  mode: z.enum(["async", "live"]),
-  deadlineDate: z.date(),
-  deadlineTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/),
-  timeLimitMinutes: z.string().optional(),
+  description: z.string().min(2).max(400),
+  // mode: z.enum(["async", "live"]),
+  // deadlineDate: z.date(),
+  // deadlineTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/),
+  // timeLimitMinutes: z.string().optional(),
   candidateEmail: z.email().optional(),
   candidateName: z.string().optional(),
 });
 
-function combineDateAndTime(date: Date, hhmm: string) {
-  const [h, m] = hhmm.split(":").map(Number);
-  const d = new Date(date);
-  d.setHours(h, m, 0, 0);
-  return d;
-}
-
-export function InterviewForm() {
+export function CreateInterviewForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -57,7 +53,7 @@ export function InterviewForm() {
     trpc.interview.create.mutationOptions({
       onSuccess: async (data) => {
         await queryClient.invalidateQueries({
-          queryKey: ["interviews"],
+          // TODO: invalidate interview list
         });
         if (data) {
           router.push(`/interviews/${data.id}`);
@@ -67,24 +63,26 @@ export function InterviewForm() {
   );
 
   const onSubmit = (data: z.infer<typeof interviewSchema>) => {
-    const asyncInterviewDeadlineAt = combineDateAndTime(data.deadlineDate, data.deadlineTime);
+    // const asyncInterviewDeadlineAt = combineDateAndTime(data.deadlineDate, data.deadlineTime);
 
     createInterviewMutation.mutate({
       title: data.title,
-      mode: data.mode,
-      timeLimitMinutes: data.timeLimitMinutes ? parseInt(data.timeLimitMinutes) : undefined,
+      description: data.description,
+      // mode: data.mode,
+      // timeLimitMinutes: data.timeLimitMinutes ? parseInt(data.timeLimitMinutes) : undefined,
       candidateEmail: data.candidateEmail,
       candidateName: data.candidateName,
-      asyncInterviewDeadlineAt: asyncInterviewDeadlineAt,
+      // asyncInterviewDeadlineAt: asyncInterviewDeadlineAt,
     });
   };
 
   const form = useZodForm(interviewSchema, {
     defaultValues: {
       title: "",
-      mode: "async",
-      deadlineDate: new Date(),
-      deadlineTime: "17:00",
+      description: "",
+      // mode: "async",
+      // deadlineDate: new Date(),
+      // deadlineTime: "17:00",
     },
   });
 
@@ -103,7 +101,23 @@ export function InterviewForm() {
             </FormItem>
           )}
         />
-        <div className="flex gap-6 items-center w-full">
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="The developer is tasked with fixing a form with incorrect state management and a11y problems."
+                  rows={3}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        {/* <div className="flex gap-6 items-center w-full">
           <FormField
             control={form.control}
             name="mode"
@@ -212,7 +226,7 @@ export function InterviewForm() {
               </FormItem>
             )}
           />
-        </div>
+        </div> */}
 
         <div className="flex gap-2 items-end w-full">
           <FormField
@@ -258,7 +272,11 @@ export function InterviewForm() {
           </FormDescription>
         </div>
 
-        <SubmitButton type="submit" className="w-full" isSubmitting={false}>
+        <SubmitButton
+          type="submit"
+          className="w-full"
+          isSubmitting={createInterviewMutation.isPending}
+        >
           Create draft
         </SubmitButton>
       </form>

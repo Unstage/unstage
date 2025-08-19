@@ -1,14 +1,17 @@
 import { GlobalOverlays } from "@components/overlays/global-overlays";
 import { Header } from "@components/recruiter/header";
 import { Sidebar } from "@components/recruiter/sidebar";
-import { getQueryClient, HydrateClient, trpc } from "../../trpc/server";
+import { getQueryClient, HydrateClient, trpc } from "@src/trpc/server";
+import { redirect } from "next/navigation";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
   const user = await queryClient.fetchQuery(trpc.user.me.queryOptions());
 
-  console.log("User from server:", user);
+  if (!user) {
+    redirect("/sign-in");
+  }
 
   return (
     <HydrateClient>
