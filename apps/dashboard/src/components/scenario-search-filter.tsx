@@ -14,236 +14,39 @@ import { Input } from "@unstage/ui/components/input";
 import { cn } from "@unstage/ui/lib/utils";
 import { useState } from "react";
 import { useScenarioFilterParams } from "src/hooks/use-scenario-filter-params";
-
-const roles = [
-  {
-    label: "Frontend",
-    value: "frontend",
-  },
-  {
-    label: "Backend",
-    value: "backend",
-  },
-  {
-    label: "Full-Stack",
-    value: "full-stack",
-  },
-  {
-    label: "Mobile",
-    value: "mobile",
-  },
-  {
-    label: "DevOps",
-    value: "devops",
-  },
-  {
-    label: "Data Science",
-    value: "data-science",
-  },
-  {
-    label: "Machine Learning",
-    value: "machine-learning",
-  },
-  {
-    label: "Site Reliability",
-    value: "site-reliability",
-  },
-];
-
-const skillLevels = [
-  {
-    label: "Intern",
-    value: "intern",
-  },
-  {
-    label: "Entry Level",
-    value: "entry-level",
-  },
-  {
-    label: "Mid Level",
-    value: "mid-level",
-  },
-  {
-    label: "Senior",
-    value: "senior",
-  },
-  {
-    label: "Staff",
-    value: "staff",
-  },
-  {
-    label: "Principal",
-    value: "principal",
-  },
-  {
-    label: "Distinguished",
-    value: "distinguished",
-  },
-];
-
-const durations = [
-  {
-    label: "Less than 1 hour",
-    value: "under-1h",
-  },
-  {
-    label: "Under 2 hours",
-    value: "under-2h",
-  },
-  {
-    label: "Under 3 hours",
-    value: "under-3h",
-  },
-  {
-    label: "Under 4 hours",
-    value: "under-4h",
-  },
-  {
-    label: "4+ hours",
-    value: "4h-plus",
-  },
-];
-
-const skills = [
-  {
-    label: "Debugging",
-    value: "debugging",
-  },
-  {
-    label: "New Feature",
-    value: "new-feature",
-  },
-  {
-    label: "Version Control",
-    value: "version-control",
-  },
-  {
-    label: "Refactoring",
-    value: "refactoring",
-  },
-  {
-    label: "Testing",
-    value: "testing",
-  },
-  {
-    label: "Code Review",
-    value: "code-review",
-  },
-  {
-    label: "API Design",
-    value: "api-design",
-  },
-  {
-    label: "Database Design",
-    value: "database-design",
-  },
-  {
-    label: "Performance Optimization",
-    value: "performance-optimization",
-  },
-  {
-    label: "Security",
-    value: "security",
-  },
-];
-
-const techStacks = [
-  // Frontend Frameworks
-  "React",
-  "Next.js",
-  "Vue",
-  "Angular",
-  "Svelte",
-  "Nuxt.js",
-  // CSS Frameworks
-  "Tailwind CSS",
-  "Bootstrap",
-  "Material UI",
-  "Chakra UI",
-  "Ant Design",
-  // Backend Frameworks
-  "Express.js",
-  "FastAPI",
-  "Django",
-  "Flask",
-  "Laravel",
-  "Spring Boot",
-  "Ruby on Rails",
-  // Languages
-  "JavaScript",
-  "TypeScript",
-  "Python",
-  "Java",
-  "C#",
-  "Go",
-  "Rust",
-  "Swift",
-  "Kotlin",
-  "PHP",
-  // Databases
-  "PostgreSQL",
-  "MySQL",
-  "MongoDB",
-  "Redis",
-  "SQLite",
-  "DynamoDB",
-  // Cloud/DevOps
-  "AWS",
-  "Azure",
-  "GCP",
-  "Docker",
-  "Kubernetes",
-  "Terraform",
-  // Mobile
-  "React Native",
-  "Flutter",
-  "Ionic",
-  // Other
-  "GraphQL",
-  "REST API",
-  "WebSockets",
-  "Microservices",
-  "Hono",
-];
-
-// biome-ignore lint/suspicious/noExplicitAny: <filter mappings>
-const filterMappings: Record<string, { getLabel: (value: any) => string }> = {
-  role: {
-    getLabel: (value: string) => roles.find((role) => role.value === value)?.label || value,
-  },
-  stack: {
-    getLabel: (value: string | string[]) => {
-      if (Array.isArray(value)) {
-        return value.join(", ");
-      }
-      return String(value);
-    },
-  },
-  level: {
-    getLabel: (value: string) => skillLevels.find((level) => level.value === value)?.label || value,
-  },
-  duration: {
-    getLabel: (value: string) =>
-      durations.find((duration) => duration.value === value)?.label || value,
-  },
-  skills: {
-    getLabel: (value: string | string[]) => {
-      if (Array.isArray(value)) {
-        return value.map((v) => skills.find((skill) => skill.value === v)?.label || v).join(", ");
-      }
-      return skills.find((skill) => skill.value === value)?.label || String(value);
-    },
-  },
-};
+import {
+  DURATIONS,
+  FILTER_MAPPINGS,
+  type FilterValue,
+  ROLES,
+  SKILL_LEVELS,
+  SKILLS,
+  TECH_STACKS,
+} from "src/lib/filter-options";
 
 export function ScenarioSearchFilter() {
   const [isOpen, setIsOpen] = useState(false);
   const [techStackSearch, setTechStackSearch] = useState("");
   const { filter, setFilter, hasFilters } = useScenarioFilterParams();
 
-  const filteredTechStacks = techStacks.filter((tech) =>
+  const filteredTechStacks = TECH_STACKS.filter((tech) =>
     tech.toLowerCase().includes(techStackSearch.toLowerCase())
   );
+
+  const updateArrayFilter = (
+    key: string,
+    value: string,
+    checked: boolean,
+    currentArray: string[] | null
+  ) => {
+    const current = currentArray || [];
+    const updated = checked ? [...current, value] : current.filter((item) => item !== value);
+
+    setFilter({
+      ...filter,
+      [key]: updated.length > 0 ? updated : null,
+    });
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -297,6 +100,14 @@ export function ScenarioSearchFilter() {
                     onChange={(e) => setTechStackSearch(e.target.value)}
                     className="h-8 bg-background! pl-9"
                     autoFocus
+                    onKeyDown={(e) => {
+                      e.stopPropagation();
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                      }
+                    }}
+                    onFocus={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
                 <div className="max-h-48 overflow-y-auto">
@@ -304,16 +115,9 @@ export function ScenarioSearchFilter() {
                     <DropdownMenuCheckboxItem
                       key={tech}
                       checked={filter.stack?.includes(tech) || false}
-                      onCheckedChange={(checked) => {
-                        const currentStack = filter.stack || [];
-                        const newStack = checked
-                          ? [...currentStack, tech]
-                          : currentStack.filter((s) => s !== tech);
-                        setFilter({
-                          ...filter,
-                          stack: newStack.length > 0 ? newStack : null,
-                        });
-                      }}
+                      onCheckedChange={(checked) =>
+                        updateArrayFilter("stack", tech, checked, filter.stack)
+                      }
                       onSelect={(event) => event.preventDefault()}
                     >
                       {tech}
@@ -328,7 +132,7 @@ export function ScenarioSearchFilter() {
                 <span>Skill level</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent sideOffset={16}>
-                {skillLevels.map((level) => (
+                {SKILL_LEVELS.map((level) => (
                   <DropdownMenuCheckboxItem
                     key={level.value}
                     checked={filter.level === level.value}
@@ -351,7 +155,7 @@ export function ScenarioSearchFilter() {
                 <span>Estimated duration</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent sideOffset={16}>
-                {durations.map((duration) => (
+                {DURATIONS.map((duration) => (
                   <DropdownMenuCheckboxItem
                     key={duration.value}
                     checked={filter.duration === duration.value}
@@ -374,7 +178,7 @@ export function ScenarioSearchFilter() {
                 <span>Role relevance</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent sideOffset={16}>
-                {roles.map((role) => (
+                {ROLES.map((role) => (
                   <DropdownMenuCheckboxItem
                     key={role.value}
                     checked={filter.role === role.value}
@@ -396,20 +200,13 @@ export function ScenarioSearchFilter() {
                 <span>Covered skills</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent sideOffset={16}>
-                {skills.map((skill) => (
+                {SKILLS.map((skill) => (
                   <DropdownMenuCheckboxItem
                     key={skill.value}
                     checked={filter.skills?.includes(skill.value) || false}
-                    onCheckedChange={(checked) => {
-                      const currentSkills = filter.skills || [];
-                      const newSkills = checked
-                        ? [...currentSkills, skill.value]
-                        : currentSkills.filter((s) => s !== skill.value);
-                      setFilter({
-                        ...filter,
-                        skills: newSkills.length > 0 ? newSkills : null,
-                      });
-                    }}
+                    onCheckedChange={(checked) =>
+                      updateArrayFilter("skills", skill.value, checked, filter.skills)
+                    }
                     onSelect={(event) => event.preventDefault()}
                   >
                     {skill.label}
@@ -425,8 +222,8 @@ export function ScenarioSearchFilter() {
         Object.entries(filter)
           .filter(([key, value]) => key !== "q" && value)
           .map(([key, value]) => {
-            const mapping = filterMappings[key as keyof typeof filterMappings];
-            const displayValue = mapping ? mapping.getLabel(value as unknown) : value;
+            const mapping = FILTER_MAPPINGS[key];
+            const displayValue = mapping ? mapping.getLabel(value as FilterValue) : String(value);
 
             return (
               <Button
