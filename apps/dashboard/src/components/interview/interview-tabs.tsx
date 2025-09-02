@@ -1,12 +1,16 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@unstage/ui/components/tabs";
+import { parseAsString, useQueryState } from "nuqs";
 import { CandidateTab } from "./candidate-tab";
 import { DeliveryTab } from "./delivery-tab";
+import { ScenarioTab } from "./scenario-tab";
 
 export function InterviewTabs() {
+  const [tab, setTab] = useQueryState("tab", parseAsString.withDefault("candidate"));
+
   return (
-    <Tabs defaultValue="candidate">
+    <Tabs value={tab} onValueChange={setTab}>
       <TabsList className="border-b-[1px] border-border w-full flex justify-start mb-6">
         <TabsTrigger value="candidate">Candidate</TabsTrigger>
         <TabsTrigger value="delivery">Delivery</TabsTrigger>
@@ -24,7 +28,7 @@ export function InterviewTabs() {
       </TabsContent>
 
       <TabsContent value="scenario">
-        <div className="text-muted-foreground">Scenario configuration coming soon...</div>
+        <ScenarioTab />
       </TabsContent>
 
       <TabsContent value="activity">

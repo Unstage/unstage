@@ -4,14 +4,13 @@ import { SetupChecklist } from "@components/interview/setup-checklist";
 import { getQueryClient, HydrateClient, trpc } from "@src/trpc/server";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import type { SearchParams } from "nuqs";
 
 export const metadata: Metadata = {
   title: "Interview",
 };
 
 type Props = {
-  params: Promise<SearchParams>;
+  params: Promise<{ interviewId: string }>;
 };
 
 export default async function InterviewPage({ params }: Props) {
@@ -40,7 +39,7 @@ export default async function InterviewPage({ params }: Props) {
           <EditableInterviewHeader />
           <InterviewTabs />
         </div>
-        <SetupChecklist />
+        {interview.status === "draft" && <SetupChecklist />}
       </HydrateClient>
     </div>
   );
