@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import type { ReactElement } from "react";
+import type { ReactNode } from "react";
 import { Providers } from "./providers";
 import { baseUrl } from "./sitemap";
 
@@ -80,7 +80,7 @@ const fontDisplay = Space_Grotesk({
   variable: "--font-display",
 });
 
-export default function Layout({ children }: { children: ReactElement }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"

@@ -2,7 +2,6 @@
 const nextConfig = {
   experimental: {
     optimizePackageImports: ["@unstage/ui"],
-    nodeMiddleware: true,
   },
   transpilePackages: [
     "@unstage/ui",
@@ -12,7 +11,7 @@ const nextConfig = {
     "@unstage/auth",
   ],
   images: {
-    domains: [],
+    remotePatterns: [],
   },
   async rewrites() {
     return [

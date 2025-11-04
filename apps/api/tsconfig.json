@@ -1,9 +1,11 @@
 {
   "extends": "@unstage/typescript-config/base.json",
   "compilerOptions": {
+    "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "baseUrl": ".",
+    "outDir": "./dist",
     "paths": {
       "@/*": ["./src/*"],
       "@utils/*": ["./src/utils/*"],
@@ -11,5 +13,5 @@
     }
   },
   "include": ["src/**/*", "../../packages/cache/src/user-cache.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

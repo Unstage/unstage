@@ -25,6 +25,13 @@ out/
 build
 dist
 
+# TypeScript build artifacts in src directories
+**/src/**/*.d.ts
+**/src/**/*.d.ts.map
+**/src/**/*.js
+# Exception: keep .tsx files (not build artifacts)
+!**/src/**/*.tsx
+
 
 # Debug
 npm-debug.log*

@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "Interviews",
 };
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
   searchParams: Promise<SearchParams>;
 };

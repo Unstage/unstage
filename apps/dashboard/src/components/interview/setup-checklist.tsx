@@ -111,7 +111,7 @@ export function SetupChecklist() {
       ((interview.mode === "async" && isNonEmpty(interview.asyncInterviewDeadlineAt)) ||
         (interview.mode === "live" && isNonEmpty(interview.liveInterviewStartsAt)));
 
-    const scenario = isNonEmpty(interview.scenarioVersionId);
+    const scenario = isNonEmpty(interview.scenarioId);
 
     const map = { basic, candidate, delivery, scenario };
     const ordered = steps.map((s) => map[s.key as keyof typeof map] ?? false);

@@ -11,7 +11,7 @@ const nextConfig = {
     "@unstage/auth",
   ],
   images: {
-    domains: [],
+    remotePatterns: [],
   },
 };
 

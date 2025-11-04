@@ -65,7 +65,7 @@ export function DeadlineForm() {
   };
 
   return (
-    <div className="border border-border max-w-2xl flex flex-col gap-6">
+    <div className="border border-border max-w-3xl flex flex-col gap-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="space-y-6 p-6">

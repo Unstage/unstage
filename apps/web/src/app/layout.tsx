@@ -6,7 +6,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
-import type { ReactElement } from "react";
+import type { ReactNode } from "react";
 import { baseUrl } from "./sitemap";
 
 export const metadata: Metadata = {
@@ -81,7 +81,7 @@ const fontDisplay = Space_Grotesk({
   variable: "--font-display",
 });
 
-export default function Layout({ children }: { children: ReactElement }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"

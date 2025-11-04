@@ -13,9 +13,9 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.4",
+    "@biomejs/biome": "^2.3.2",
+    "@types/node": "^24.10.0",
     "@unstage/typescript-config": "workspace:*",
-    "@types/node": "^24.2.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }

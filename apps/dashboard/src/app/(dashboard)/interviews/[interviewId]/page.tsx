@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   title: "Interview",
 };
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
   params: Promise<{ interviewId: string }>;
 };

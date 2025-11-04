@@ -70,7 +70,7 @@ export function TeamDropdown({ isExpanded = false }: Props) {
     setSelectedId(teamId);
     setActive(false);
 
-    changeTeamMutation.mutate({ teamId });
+    changeTeamMutation.mutate({ organizationId: teamId });
   };
 
   return (
