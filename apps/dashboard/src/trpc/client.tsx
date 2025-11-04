@@ -8,6 +8,7 @@ import { createTRPCContext } from "@trpc/tanstack-react-query";
 import type { AppRouter } from "@unstage/api/routers";
 import { useState } from "react";
 import superjson from "superjson";
+import { env } from "../env";
 import { makeQueryClient } from "./query-client";
 
 export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>();
@@ -40,7 +41,7 @@ export function TRPCReactProvider(
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          url: `${process.env.NEXT_PUBLIC_API_URL}/trpc`,
+          url: `${env.NEXT_PUBLIC_API_URL}/trpc`,
           transformer: superjson,
           fetch: async (url, options) => {
             return fetch(url, {
@@ -56,7 +57,7 @@ export function TRPCReactProvider(
         }),
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
+            env.NODE_ENV === "development" ||
             (opts.direction === "down" && opts.result instanceof Error),
         }),
       ],

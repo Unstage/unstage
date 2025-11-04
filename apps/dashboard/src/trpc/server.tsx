@@ -9,6 +9,7 @@ import { getCountryCode, getLocale, getTimezone } from "@unstage/location";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import superjson from "superjson";
+import { env } from "../env";
 import { makeQueryClient } from "./query-client";
 
 // IMPORTANT: Create a stable getter for the query client that
@@ -20,7 +21,7 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
   client: createTRPCClient({
     links: [
       httpBatchLink({
-        url: `${process.env.NEXT_PUBLIC_API_URL}/trpc`,
+        url: `${env.NEXT_PUBLIC_API_URL}/trpc`,
         transformer: superjson,
         fetch: async (url, options) => {
           return fetch(url, {
@@ -40,7 +41,7 @@ export const trpc = createTRPCOptionsProxy<AppRouter>({
       }),
       loggerLink({
         enabled: (opts) =>
-          process.env.NODE_ENV === "development" ||
+          env.NODE_ENV === "development" ||
           (opts.direction === "down" && opts.result instanceof Error),
       }),
     ],

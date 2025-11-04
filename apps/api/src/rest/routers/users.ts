@@ -1,11 +1,11 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import { getUserById, updateUser } from "@unstage/db/queries/users";
 import { updateUserSchema, userSchema } from "../../schemas/users";
+import type { HonoContext } from "../../types/context";
 import { validateResponse } from "../../utils/validate-response";
 import { withRequiredScope } from "../middleware";
-import type { Context } from "../types";
 
-const app = new OpenAPIHono<Context>();
+const app = new OpenAPIHono<HonoContext>();
 
 app.openapi(
   createRoute({
@@ -32,7 +32,8 @@ app.openapi(
     const db = c.get("db");
     const session = c.get("session");
 
-    const result = await getUserById(db, session.user.id);
+    // Session is guaranteed by withAuth middleware
+    const result = await getUserById(db, session!.user.id);
 
     //@ts-ignore
     return c.json(validateResponse(result, userSchema));
@@ -74,8 +75,9 @@ app.openapi(
     const session = c.get("session");
     const body = c.req.valid("json");
 
+    // Session is guaranteed by withAuth middleware
     const result = await updateUser(db, {
-      id: session.user.id,
+      id: session!.user.id,
       ...body,
     });
 

@@ -5,19 +5,22 @@ import { Scalar } from "@scalar/hono-api-reference";
 import { checkHealth } from "@unstage/db/utils/health";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
+import { env } from "./env";
+import { withLogger } from "./rest/middleware/logger";
 import { routers } from "./rest/routers";
-import type { Context } from "./rest/types";
 import { createTRPCContext } from "./trpc/init";
 import { appRouter } from "./trpc/routers/_app";
+import type { HonoContext } from "./types/context";
+import { logger } from "./utils/logger";
 
-const app = new OpenAPIHono<Context>();
+const app = new OpenAPIHono<HonoContext>();
 
 app.use(secureHeaders());
 
 app.use(
   "*",
   cors({
-    origin: process.env.ALLOWED_API_ORIGINS?.split(",") ?? [],
+    origin: env.ALLOWED_API_ORIGINS?.split(",") ?? [],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowHeaders: [
       "Authorization",
@@ -27,15 +30,17 @@ app.use(
       "x-user-locale",
       "x-user-timezone",
       "x-user-country",
+      "x-request-id",
     ],
     credentials: true,
-    exposeHeaders: ["Content-Length"],
+    exposeHeaders: ["Content-Length", "x-request-id"],
     maxAge: 86400,
   })
 );
 
 app.use(
   "/trpc/*",
+  withLogger,
   trpcServer({
     router: appRouter,
     createContext: createTRPCContext,
@@ -45,10 +50,9 @@ app.use(
 app.get("/health", async (c) => {
   try {
     await checkHealth();
-
     return c.json({ status: "ok" }, 200);
   } catch (error) {
-    console.error(error);
+    logger.error({ err: error }, "Health check failed");
     return c.json({ status: "error" }, 500);
   }
 });
@@ -68,8 +72,7 @@ app.doc("/openapi", {
   },
   servers: [
     {
-      url:
-        process.env.NODE_ENV === "production" ? "https://api.unstage.dev" : "http://localhost:8787",
+      url: env.NODE_ENV === "production" ? "https://api.unstage.dev" : "http://localhost:8787",
       description: "Production API",
     },
   ],
@@ -81,7 +84,6 @@ app.doc("/openapi", {
   ],
 });
 
-// Register security scheme
 app.openAPIRegistry.registerComponent("securitySchemes", "token", {
   type: "http",
   scheme: "bearer",
@@ -95,11 +97,14 @@ app.route("/", routers);
 
 serve({
   fetch: app.fetch,
-  port: 8787,
+  port: env.PORT,
 });
 
-console.log(
-  `🚀 Unstage API is running on ${process.env.NODE_ENV === "production" ? "https://api.unstage.dev" : "http://localhost"}:${
-    process.env.PORT ?? 8787
-  }`
+logger.info(
+  {
+    port: env.PORT,
+    environment: env.NODE_ENV,
+    url: env.NODE_ENV === "production" ? "https://api.unstage.dev" : `http://localhost:${env.PORT}`,
+  },
+  "🚀 Unstage API is running"
 );
