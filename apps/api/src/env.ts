@@ -8,7 +8,7 @@ export const env = createEnv({
     PORT: z.coerce.number().default(8787),
 
     // Database (inherited from @unstage/db)
-    DATABASE_URL: z.string().url().min(1),
+    DATABASE_URL: z.url().min(1),
 
     // API
     ALLOWED_API_ORIGINS: z.string().optional(),
@@ -16,7 +16,7 @@ export const env = createEnv({
 
     // Auth (Better Auth)
     BETTER_AUTH_SECRET: z.string().min(32).optional(),
-    BETTER_AUTH_URL: z.string().url().optional(),
+    BETTER_AUTH_URL: z.url().optional(),
 
     // External Services
     OPENAI_API_KEY: z.string().optional(),

@@ -1,8 +1,11 @@
-import { drizzle, type NeonDatabase } from "drizzle-orm/neon-serverless";
+import { neon } from "@neondatabase/serverless";
+import { drizzle, type NeonHttpDatabase } from "drizzle-orm/neon-http";
 import { env } from "./env";
 import * as schema from "./schema";
 
-const db: NeonDatabase<typeof schema> = drizzle(env.DATABASE_URL, {
+const sql = neon(env.DATABASE_URL);
+
+const db: NeonHttpDatabase<typeof schema> = drizzle(sql, {
   schema,
   casing: "snake_case",
 });

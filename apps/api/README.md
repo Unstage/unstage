@@ -122,14 +122,85 @@ Production-ready structured logging with:
 
 ## Deployment
 
-Built for Node.js environments:
+The API is deployed to **Cloudflare Workers** at `api.unstage.dev`.
+
+### Quick Deploy
 
 ```bash
-pnpm build
-pnpm start
+cd apps/api
+
+# Login to Cloudflare (first time only)
+wrangler login
+
+# Set production secrets (first time only)
+wrangler secret put DATABASE_URL --env production
+wrangler secret put BETTER_AUTH_SECRET --env production
+wrangler secret put RESEND_API_KEY --env production
+
+# Deploy to production
+wrangler deploy --env production
 ```
 
-Environment variables must be set in production.
+### Local Development
+
+```bash
+# Run with wrangler (recommended - matches production)
+pnpm dev
+
+# Or use wrangler directly
+wrangler dev
+```
+
+### Environment Variables
+
+**Production Secrets** (set with `wrangler secret put`):
+- `DATABASE_URL` - Neon PostgreSQL connection string (use HTTP mode)
+- `BETTER_AUTH_SECRET` - Must match dashboard secret
+- `RESEND_API_KEY` - Email API key
+- `OPENAI_API_KEY` - OpenAI API key (optional)
+- `STRIPE_SECRET_KEY` - Stripe secret (optional)
+
+**Public Variables** (configured in `wrangler.toml`):
+- `NODE_ENV=production`
+- `BETTER_AUTH_URL=https://app.unstage.dev` (dashboard URL, not API!)
+- `ALLOWED_API_ORIGINS=https://unstage.dev,https://app.unstage.dev`
+- `LOG_LEVEL=info`
+
+### GitHub Actions
+
+Automatic deployment on push to `main`:
+
+`.github/workflows/deploy-api.yml` handles:
+- Installing dependencies
+- Building the project
+- Deploying to Cloudflare Workers
+- Updating secrets
+
+### Important Notes
+
+1. **Database**: Use Neon HTTP driver for Cloudflare Workers compatibility
+2. **Better Auth**: `BETTER_AUTH_URL` points to dashboard (`app.unstage.dev`), not the API
+3. **Secrets**: Never commit secrets - use `wrangler secret put`
+4. **Custom Domain**: Configured via Cloudflare Dashboard (Workers & Pages → Domains)
+
+### Monitoring
+
+```bash
+# View real-time logs
+wrangler tail --env production
+
+# View deployments
+wrangler deployments list --env production
+
+# Rollback if needed
+wrangler rollback --env production
+```
+
+### Resources
+
+- [wrangler.toml](./wrangler.toml) - Cloudflare Workers configuration
+- [GitHub Actions](./.github/workflows/deploy-api.yml) - CI/CD workflow
+- [Cloudflare Dashboard](https://dash.cloudflare.com/) - Metrics & monitoring
 
 ## Dependencies
 

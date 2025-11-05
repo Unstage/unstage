@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "dotenvx run -f .env.local -- tsx src/index.ts",
+    "dev": "dotenvx run -f .env.local -- wrangler dev",
     "build": "tsc",
     "start": "node dist/server.js",
     "docker:build": "docker build -t unstage-api .",

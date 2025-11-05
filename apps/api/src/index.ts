@@ -1,4 +1,3 @@
-import { serve } from "@hono/node-server";
 import { trpcServer } from "@hono/trpc-server";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
@@ -52,7 +51,14 @@ app.get("/health", async (c) => {
     await checkHealth();
     return c.json({ status: "ok" }, 200);
   } catch (error) {
-    logger.error({ err: error }, "Health check failed");
+    logger.error(
+      {
+        err: error,
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+      "Health check failed"
+    );
     return c.json({ status: "error" }, 500);
   }
 });
@@ -95,16 +101,4 @@ app.get("/", Scalar({ url: "/openapi", pageTitle: "Unstage API", theme: "saturn"
 
 app.route("/", routers);
 
-serve({
-  fetch: app.fetch,
-  port: env.PORT,
-});
-
-logger.info(
-  {
-    port: env.PORT,
-    environment: env.NODE_ENV,
-    url: env.NODE_ENV === "production" ? "https://api.unstage.dev" : `http://localhost:${env.PORT}`,
-  },
-  "🚀 Unstage API is running"
-);
+export default app;

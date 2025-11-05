@@ -10,11 +10,11 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
     // Database (inherited from @unstage/db)
-    DATABASE_URL: z.string().url().min(1),
+    DATABASE_URL: z.url().min(1),
 
     // Auth (Better Auth)
     BETTER_AUTH_SECRET: z.string().min(32).optional(),
-    BETTER_AUTH_URL: z.string().url().optional(),
+    BETTER_AUTH_URL: z.url().optional(),
 
     // External Services
     RESEND_API_KEY: z.string().optional(),
@@ -26,7 +26,8 @@ export const env = createEnv({
    * Must be prefixed with NEXT_PUBLIC_
    */
   client: {
-    NEXT_PUBLIC_API_URL: z.string().url(),
+    NEXT_PUBLIC_API_URL: z.url(),
+    NEXT_PUBLIC_AUTH_URL: z.url().optional().default("http://localhost:3001"),
   },
 
   /**
@@ -44,6 +45,7 @@ export const env = createEnv({
 
     // Client
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_AUTH_URL: process.env.NEXT_PUBLIC_AUTH_URL,
   },
 
   /**
