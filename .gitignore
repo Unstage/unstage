@@ -43,4 +43,7 @@ yarn-error.log*
 *.pem
 .vscode/
 
-.dev.varsapps/api/.wrangler/
+# Wrangler
+.dev.vars
+.wrangler/
+apps/api/.wrangler/
