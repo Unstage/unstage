@@ -1,15 +1,16 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
   "files": {
-    "experimentalScannerIgnores": [
-      "node_modules",
-      "dist",
-      "build",
-      ".next",
-      ".turbo",
-      ".vercel",
-      ".wrangler",
-      "coverage"
+    "includes": [
+      "**/*",
+      "!!**/node_modules",
+      "!!**/dist",
+      "!!**/build",
+      "!!**/.next",
+      "!!**/.turbo",
+      "!!**/.vercel",
+      "!!**/.wrangler",
+      "!!**/coverage"
     ]
   },
   "linter": {
