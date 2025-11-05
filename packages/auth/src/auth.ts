@@ -12,6 +12,10 @@ import { betterAuthSchema } from "./schema";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const authConfig = {
+  trustedOrigins:
+    process.env.NODE_ENV === "production"
+      ? ["https://unstage.dev", "https://app.unstage.dev", "https://api.unstage.dev"]
+      : ["http://localhost:3000", "http://localhost:3001", "http://localhost:8787"],
   databaseHooks: {
     session: {
       create: {
@@ -29,6 +33,10 @@ const authConfig = {
   },
   advanced: {
     cookiePrefix: "unstage",
+    crossSubDomainCookies: {
+      enabled: process.env.NODE_ENV === "production",
+      domain: "app.unstage.dev",
+    },
     database: {
       generateId: false,
     },
