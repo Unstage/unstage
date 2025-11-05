@@ -1,4 +1,4 @@
-import { z } from 'zod/v3';
+import type { z } from "zod/v3";
 import { logger } from "./logger";
 
 export function validateResponse(data: unknown, schema: z.ZodType) {

@@ -424,7 +424,6 @@ export const scenarios = pgTable(
   ]
 );
 
-
 export const interviewRepositories = pgTable(
   "interview_repositories",
   {

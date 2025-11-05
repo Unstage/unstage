@@ -35,7 +35,7 @@ app.openapi(
     // Session is guaranteed by withAuth middleware
     const result = await getUserById(db, session!.user.id);
 
-    //@ts-ignore
+    //@ts-expect-error
     return c.json(validateResponse(result, userSchema));
   }
 );
@@ -81,7 +81,7 @@ app.openapi(
       ...body,
     });
 
-    //@ts-ignore
+    //@ts-expect-error
     return c.json(validateResponse(result, userSchema));
   }
 );
