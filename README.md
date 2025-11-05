@@ -1,136 +1,212 @@
 # Unstage
 
+> Hire engineers based on real skills, not algorithm memorization
 
-This Turborepo starter is maintained by the Turborepo core team.
+Unstage is an AI-powered technical interview platform that evaluates candidates through realistic coding scenarios, collaborative problem-solving, and predictive job performance insights.
 
-## Using this example
+## Tech Stack
 
-Run the following command:
+- **Frontend**: React 19, Next.js 16, TailwindCSS 4
+- **Backend**: Hono 4, tRPC 11
+- **Database**: PostgreSQL, Drizzle ORM
+- **Auth**: better-auth with email OTP
+- **Monorepo**: Turbo, pnpm
+- **Code Quality**: Biome, TypeScript
 
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## Project Structure
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+unstage/
+├── apps/
+│   ├── api/          # Backend API (Hono + tRPC)
+│   ├── dashboard/    # Recruiter dashboard (Next.js)
+│   └── web/          # Public website (Next.js)
+├── packages/
+│   ├── auth/         # Authentication
+│   ├── cache/        # LRU caching
+│   ├── db/           # Database schema & queries
+│   ├── email/        # Email templates
+│   ├── encryption/   # Crypto utilities
+│   ├── location/     # Geolocation
+│   ├── ui/           # Component library
+│   └── utils/        # Shared utilities
+└── package.json
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Getting Started
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### Prerequisites
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+- Node.js >= 24
+- pnpm 10.14.0 or higher
+- PostgreSQL database
 
-### Develop
+### Installation
 
-To develop all apps and packages, run the following command:
+```bash
+# Install dependencies
+pnpm install
 
-```
-cd my-turborepo
+# Set up environment variables
+# Copy .env.example files in each app/package and configure
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+# Database setup
+cd packages/db
+pnpm db:generate
+pnpm db:migrate
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# Run development servers
+pnpm dev
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+This starts all apps:
+- API: http://localhost:8787
+- Dashboard: http://localhost:3001
+- Web: http://localhost:3000
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### Development
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+```bash
+# Run specific app
+pnpm --filter @unstage/api dev
+pnpm --filter @unstage/dashboard dev
+pnpm --filter @unstage/web dev
 
-### Remote Caching
+# Build all apps
+pnpm build
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# Code quality
+pnpm lint
+pnpm format
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Apps
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### API (`apps/api`)
+Backend service with REST and tRPC endpoints. Handles authentication, interviews, organizations, and user management.
+
+- OpenAPI documentation at `/`
+- Health check at `/health`
+- tRPC at `/trpc/*`
+
+### Dashboard (`apps/dashboard`)
+Recruiter-facing interface for managing interviews, teams, and candidates.
+
+- Interview creation and editing
+- Scenario library
+- Team management
+- Candidate tracking
+
+### Web (`apps/web`)
+Public-facing website and candidate interview interface.
+
+- Landing pages
+- Pricing
+- Interview taking experience
+
+## Packages
+
+- **db**: PostgreSQL database with Drizzle ORM
+- **auth**: Email OTP authentication with better-auth
+- **ui**: Shared React component library (20+ components)
+- **cache**: LRU caching for API keys and users
+- **email**: React-based email templates
+- **encryption**: AES-256-GCM encryption utilities
+- **location**: Geolocation from request headers
+- **utils**: Shared utilities and validation
+
+## Environment Variables
+
+Each app and package has its own `.env.example` file. Copy and configure:
+
+```bash
+# Database
+cp packages/db/.env.example packages/db/.env.local
+
+# API
+cp apps/api/.env.example apps/api/.env.local
+
+# Dashboard
+cp apps/dashboard/.env.example apps/dashboard/.env.local
+
+# Web
+cp apps/web/.env.example apps/web/.env.local
+```
+
+Required variables are validated at runtime using `t3-env`.
+
+## Scripts
+
+```bash
+# Development
+pnpm dev              # Start all apps
+pnpm build            # Build all apps
+pnpm clean            # Clean build artifacts
+
+# Database
+pnpm db:generate      # Generate migrations
+pnpm db:migrate       # Run migrations
+pnpm db:push          # Push schema changes
+pnpm db:studio        # Open Drizzle Studio
+
+# Code Quality
+pnpm lint             # Lint all code
+pnpm format           # Format all code
+pnpm typecheck        # Type check all packages
+```
+
+## Architecture
+
+Unstage uses a monorepo architecture with clearly separated concerns:
+
+1. **Apps** contain user-facing applications
+2. **Packages** provide shared functionality
+3. **Turbo** orchestrates builds and caching
+4. **pnpm** manages dependencies efficiently
+
+### Dependency Graph
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+apps/api → auth, cache, db, email, encryption, utils
+apps/dashboard → api (types), auth, db, email, location, ui
+apps/web → db, email, ui
+packages/auth → db
+packages/cache → (standalone)
+packages/db → (foundation)
+packages/email → ui, utils
+packages/ui → utils
 ```
 
-## Useful Links
+## Claude Code Commands
 
-Learn more about the power of Turborepo:
+We use Claude Code with custom slash commands to help with development. If you have Claude Code installed, you can use:
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- **`/setup`** - Complete guided setup for new developers
+  - Checks prerequisites
+  - Configures environment variables
+  - Sets up database
+  - Verifies everything works
+
+- **`/troubleshoot`** - Diagnose and fix development issues
+  - Port conflicts
+  - Database connection errors
+  - Build failures
+  - Authentication problems
+
+- **`/add-package`** - Add new packages or apps to the monorepo
+  - Creates proper structure
+  - Sets up TypeScript config
+  - Follows best practices
+
+See [`.claude/README.md`](.claude/README.md) for more information.
+
+## Contributing
+
+1. Follow the existing code style (enforced by Biome)
+2. Write tests for new features
+3. Update documentation as needed
+4. Use conventional commit messages
+
+## License
+
+Proprietary

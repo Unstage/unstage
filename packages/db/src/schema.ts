@@ -345,8 +345,8 @@ export const interviewRuns = pgTable(
   ]
 );
 
-export const apikeys = pgTable(
-  "apikeys",
+export const apiKeys = pgTable(
+  "api_keys",
   {
     id: uuid().defaultRandom().primaryKey().notNull(),
     name: text("name"),
@@ -360,21 +360,21 @@ export const apikeys = pgTable(
     lastUsedAt: timestamp("last_used_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
-    index("apikeys_key_hash_idx").using("btree", table.keyHash.asc().nullsLast()),
-    index("apikeys_user_id_idx").using("btree", table.userId.asc().nullsLast().op("uuid_ops")),
-    index("apikeys_organization_id_idx").using(
+    index("api_keys_key_hash_idx").using("btree", table.keyHash.asc().nullsLast()),
+    index("api_keys_user_id_idx").using("btree", table.userId.asc().nullsLast().op("uuid_ops")),
+    index("api_keys_organization_id_idx").using(
       "btree",
       table.organizationId.asc().nullsLast().op("uuid_ops")
     ),
     foreignKey({
       columns: [table.userId],
       foreignColumns: [users.id],
-      name: "apikeys_user_id_fk",
+      name: "api_keys_user_id_fk",
     }).onDelete("cascade"),
     foreignKey({
       columns: [table.organizationId],
       foreignColumns: [organizations.id],
-      name: "apikeys_organization_id_fk",
+      name: "api_keys_organization_id_fk",
     }).onDelete("cascade"),
   ]
 );

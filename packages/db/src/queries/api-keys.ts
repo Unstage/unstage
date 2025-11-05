@@ -1,26 +1,26 @@
 import type { Database } from "@unstage/db";
-import { apikeys, users } from "@unstage/db/schema";
+import { apiKeys, users } from "@unstage/db/schema";
 import type { InferSelectModel } from "drizzle-orm";
 import { and, eq } from "drizzle-orm";
 
-export type ApiKey = InferSelectModel<typeof apikeys>;
+export type ApiKey = InferSelectModel<typeof apiKeys>;
 
 export const getApiKeyByToken = async (db: Database, keyHash: string) => {
   const [result] = await db
     .select({
-      id: apikeys.id,
-      name: apikeys.name,
-      keyHash: apikeys.keyHash,
-      userId: apikeys.userId,
-      organizationId: apikeys.organizationId,
-      scopes: apikeys.scopes,
-      createdAt: apikeys.createdAt,
-      expiresAt: apikeys.expiresAt,
-      revokedAt: apikeys.revokedAt,
-      lastUsedAt: apikeys.lastUsedAt,
+      id: apiKeys.id,
+      name: apiKeys.name,
+      keyHash: apiKeys.keyHash,
+      userId: apiKeys.userId,
+      organizationId: apiKeys.organizationId,
+      scopes: apiKeys.scopes,
+      createdAt: apiKeys.createdAt,
+      expiresAt: apiKeys.expiresAt,
+      revokedAt: apiKeys.revokedAt,
+      lastUsedAt: apiKeys.lastUsedAt,
     })
-    .from(apikeys)
-    .where(eq(apikeys.keyHash, keyHash))
+    .from(apiKeys)
+    .where(eq(apiKeys.keyHash, keyHash))
     .limit(1);
 
   return result;
@@ -29,12 +29,12 @@ export const getApiKeyByToken = async (db: Database, keyHash: string) => {
 export const getApiKeysByOrganization = async (db: Database, organizationId: string) => {
   return db
     .select({
-      id: apikeys.id,
-      name: apikeys.name,
-      scopes: apikeys.scopes,
-      expiresAt: apikeys.expiresAt,
-      revokedAt: apikeys.revokedAt,
-      lastUsedAt: apikeys.lastUsedAt,
+      id: apiKeys.id,
+      name: apiKeys.name,
+      scopes: apiKeys.scopes,
+      expiresAt: apiKeys.expiresAt,
+      revokedAt: apiKeys.revokedAt,
+      lastUsedAt: apiKeys.lastUsedAt,
       user: {
         id: users.id,
         name: users.name,
@@ -42,10 +42,10 @@ export const getApiKeysByOrganization = async (db: Database, organizationId: str
         image: users.image,
       },
     })
-    .from(apikeys)
-    .leftJoin(users, eq(apikeys.userId, users.id))
-    .where(eq(apikeys.organizationId, organizationId))
-    .orderBy(apikeys.createdAt);
+    .from(apiKeys)
+    .leftJoin(users, eq(apiKeys.userId, users.id))
+    .where(eq(apiKeys.organizationId, organizationId))
+    .orderBy(apiKeys.createdAt);
 };
 
 type DeleteApiKeyParams = {
@@ -55,10 +55,10 @@ type DeleteApiKeyParams = {
 
 export const deleteApiKey = async (db: Database, params: DeleteApiKeyParams) => {
   const [result] = await db
-    .delete(apikeys)
-    .where(and(eq(apikeys.id, params.id), eq(apikeys.organizationId, params.organizationId)))
+    .delete(apiKeys)
+    .where(and(eq(apiKeys.id, params.id), eq(apiKeys.organizationId, params.organizationId)))
     .returning({
-      keyHash: apikeys.keyHash,
+      keyHash: apiKeys.keyHash,
     });
 
   return result;
@@ -66,10 +66,10 @@ export const deleteApiKey = async (db: Database, params: DeleteApiKeyParams) => 
 
 export const updateApiKeyLastUsedAt = async (db: Database, id: string) => {
   return await db
-    .update(apikeys)
+    .update(apiKeys)
     .set({ lastUsedAt: new Date() })
-    .where(eq(apikeys.id, id))
+    .where(eq(apiKeys.id, id))
     .returning({
-      lastUsedAt: apikeys.lastUsedAt,
+      lastUsedAt: apiKeys.lastUsedAt,
     });
 };
