@@ -40,6 +40,11 @@ export function Progress({
 
   const filled = useMemo(() => Math.round((count || 0) * percent), [count, percent]);
 
+  const items = useMemo(
+    () => Array.from({ length: count }, (_, i) => ({ id: `bar-${i}`, index: i })),
+    [count]
+  );
+
   return (
     <div className="flex flex-col gap-2 w-full">
       <div
@@ -51,14 +56,17 @@ export function Progress({
         aria-valuenow={Math.round(percent * 100)}
         aria-label="Progress"
       >
-        {Array.from({ length: count }).map((_, i) => (
+        {items.map(({ id, index }) => (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.01 }}
-            key={i}
-            className={cn(i < filled ? filledClassName : emptyClassName, "h-6 w-1 rounded-full")}
+            transition={{ duration: 0.4, delay: index * 0.01 }}
+            key={id}
+            className={cn(
+              index < filled ? filledClassName : emptyClassName,
+              "h-6 w-1 rounded-full"
+            )}
           />
         ))}
       </div>

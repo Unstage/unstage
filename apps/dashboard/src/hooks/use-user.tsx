@@ -24,6 +24,7 @@ export function useUserMutation() {
         const previousData = queryClient.getQueryData(trpc.user.me.queryKey());
 
         // Optimistically update
+        // biome-ignore lint/suspicious/noExplicitAny: Complex tanstack query type
         queryClient.setQueryData(trpc.user.me.queryKey(), (old: any) => ({
           ...old,
           ...newData,

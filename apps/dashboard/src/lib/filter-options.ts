@@ -46,21 +46,61 @@ export const SKILLS = [
 
 export const TECH_STACKS = [
   // Frontend Frameworks
-  "React", "Next.js", "Vue", "Angular", "Svelte", "Nuxt.js",
+  "React",
+  "Next.js",
+  "Vue",
+  "Angular",
+  "Svelte",
+  "Nuxt.js",
   // CSS Frameworks
-  "Tailwind CSS", "Bootstrap", "Material UI", "Chakra UI", "Ant Design",
+  "Tailwind CSS",
+  "Bootstrap",
+  "Material UI",
+  "Chakra UI",
+  "Ant Design",
   // Backend Frameworks
-  "Express.js", "FastAPI", "Django", "Flask", "Laravel", "Spring Boot", "Ruby on Rails",
+  "Express.js",
+  "FastAPI",
+  "Django",
+  "Flask",
+  "Laravel",
+  "Spring Boot",
+  "Ruby on Rails",
   // Languages
-  "JavaScript", "TypeScript", "Python", "Java", "C#", "Go", "Rust", "Swift", "Kotlin", "PHP",
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Java",
+  "C#",
+  "Go",
+  "Rust",
+  "Swift",
+  "Kotlin",
+  "PHP",
   // Databases
-  "PostgreSQL", "MySQL", "MongoDB", "Redis", "SQLite", "DynamoDB",
+  "PostgreSQL",
+  "MySQL",
+  "MongoDB",
+  "Redis",
+  "SQLite",
+  "DynamoDB",
   // Cloud/DevOps
-  "AWS", "Azure", "GCP", "Docker", "Kubernetes", "Terraform",
+  "AWS",
+  "Azure",
+  "GCP",
+  "Docker",
+  "Kubernetes",
+  "Terraform",
   // Mobile
-  "React Native", "Flutter", "Ionic",
+  "React Native",
+  "Flutter",
+  "Ionic",
   // Other
-  "GraphQL", "REST API", "WebSockets", "Microservices", "Hono",
+  "GraphQL",
+  "REST API",
+  "WebSockets",
+  "Microservices",
+  "Hono",
 ] as const;
 
 // ========================
@@ -75,8 +115,7 @@ export const FILTER_MAPPINGS: Record<string, { getLabel: (value: FilterValue) =>
       ROLES.find((role) => role.value === value)?.label || String(value),
   },
   stack: {
-    getLabel: (value: FilterValue) =>
-      Array.isArray(value) ? value.join(", ") : String(value),
+    getLabel: (value: FilterValue) => (Array.isArray(value) ? value.join(", ") : String(value)),
   },
   level: {
     getLabel: (value: FilterValue) =>
@@ -89,9 +128,7 @@ export const FILTER_MAPPINGS: Record<string, { getLabel: (value: FilterValue) =>
   skills: {
     getLabel: (value: FilterValue) => {
       if (Array.isArray(value)) {
-        return value
-          .map((v) => SKILLS.find((skill) => skill.value === v)?.label || v)
-          .join(", ");
+        return value.map((v) => SKILLS.find((skill) => skill.value === v)?.label || v).join(", ");
       }
       return SKILLS.find((skill) => skill.value === value)?.label || String(value);
     },

@@ -13,7 +13,7 @@ export function DeliveryTab() {
   return (
     <div className="space-y-6">
       <DeliveryMethodForm />
-      
+
       {interview.mode === "async" && <DeadlineForm />}
     </div>
   );

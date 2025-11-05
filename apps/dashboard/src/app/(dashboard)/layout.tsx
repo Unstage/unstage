@@ -4,7 +4,7 @@ import { Sidebar } from "@components/recruiter/sidebar";
 import { getQueryClient, HydrateClient, trpc } from "@src/trpc/server";
 import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();

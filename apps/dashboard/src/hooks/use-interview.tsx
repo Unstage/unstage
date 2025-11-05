@@ -16,7 +16,7 @@ export function useInterviewMutation() {
     trpc.interview.update.mutationOptions({
       onMutate: async (variables) => {
         const { interviewId, ...newData } = variables;
-        
+
         // Cancel outgoing refetches
         await queryClient.cancelQueries({
           queryKey: trpc.interview.getById.queryKey({ interviewId }),
@@ -28,17 +28,15 @@ export function useInterviewMutation() {
         );
 
         // Optimistically update
-        queryClient.setQueryData(
-          trpc.interview.getById.queryKey({ interviewId }),
-          (old: any) => ({
-            ...old,
-            ...newData,
-          })
-        );
+        // biome-ignore lint/suspicious/noExplicitAny: Complex tanstack query type
+        queryClient.setQueryData(trpc.interview.getById.queryKey({ interviewId }), (old: any) => ({
+          ...old,
+          ...newData,
+        }));
 
         return { previousData, interviewId };
       },
-      onError: (_, variables, context) => {
+      onError: (_, _variables, context) => {
         // Rollback on error
         if (context?.previousData && context.interviewId) {
           queryClient.setQueryData(

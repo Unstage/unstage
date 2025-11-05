@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@unstage/ui/lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function StatusWidget() {
   const [status] = useState("operational");

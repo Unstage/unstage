@@ -81,7 +81,7 @@ export function NotificationCenter() {
             {unreadNotifications.length > 0 && (
               <ScrollArea className="pb-12 h-[475px]">
                 <div className="divide-y">
-                  {unreadNotifications.map((notification) => {
+                  {unreadNotifications.map((_notification) => {
                     return "Hello";
                     //   <NotificationItem
                     //     key={notification.id}
@@ -117,7 +117,7 @@ export function NotificationCenter() {
             {archivedNotifications.length > 0 && (
               <ScrollArea className="h-[490px]">
                 <div className="divide-y">
-                  {archivedNotifications.map((notification) => {
+                  {archivedNotifications.map((_notification) => {
                     return "Hi";
                     //   <NotificationItem
                     //     key={notification.id}

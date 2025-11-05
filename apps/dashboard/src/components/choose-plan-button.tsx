@@ -7,9 +7,9 @@ import { useState } from "react";
 export function ChoosePlanButton({
   children,
   initialIsOpen,
-  daysLeft,
-  hasDiscount,
-  discountPrice,
+  daysLeft: _daysLeft,
+  hasDiscount: _hasDiscount,
+  discountPrice: _discountPrice,
 }: {
   children: React.ReactNode;
   initialIsOpen?: boolean;

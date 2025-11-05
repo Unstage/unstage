@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@unstage/ui/components/select";
-import { Textarea } from "@unstage/ui/components/textarea";
 import { z } from "zod";
 
 const personaRoles = [
