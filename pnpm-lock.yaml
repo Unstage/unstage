@@ -269,6 +269,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@t3-oss/env-nextjs':
+        specifier: ^0.13.8
+        version: 0.13.8(typescript@5.9.3)(zod@4.1.12)
       '@tanstack/react-query':
         specifier: ^5.90.6
         version: 5.90.6(react@19.2.0)
@@ -317,6 +320,9 @@ importers:
       stripe:
         specifier: ^19.2.0
         version: 19.2.0(@types/node@24.10.0)
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.3.2
