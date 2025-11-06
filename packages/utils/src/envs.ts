@@ -26,6 +26,14 @@ export function getWebsiteUrl() {
   return "http://localhost:3000";
 }
 
+export function getApiUrl() {
+  if (process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production") {
+    return "https://api.unstage.dev";
+  }
+
+  return "http://localhost:8787";
+}
+
 export function getCdnUrl() {
   return "https://cdn.unstage.dev";
 }

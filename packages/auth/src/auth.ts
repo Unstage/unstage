@@ -2,6 +2,7 @@ import db from "@unstage/db";
 import { getUserById } from "@unstage/db/queries/users";
 import EmailOtp from "@unstage/email/email-otp";
 import { assertIsSignIn } from "@unstage/utils/assertions";
+import { getApiUrl, getAppUrl, getWebsiteUrl } from "@unstage/utils/envs";
 import { type BetterAuthOptions, betterAuth, type Session } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -12,10 +13,7 @@ import { betterAuthSchema } from "./schema";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const authConfig = {
-  trustedOrigins:
-    process.env.VERCEL_ENV === "production"
-      ? ["https://unstage.dev", "https://app.unstage.dev", "https://api.unstage.dev"]
-      : ["http://localhost:3000", "http://localhost:3001", "http://localhost:8787"],
+  trustedOrigins: [getAppUrl(), getWebsiteUrl(), getApiUrl()],
   databaseHooks: {
     session: {
       create: {
@@ -35,7 +33,7 @@ const authConfig = {
     cookiePrefix: "unstage",
     crossSubDomainCookies: {
       enabled: true,
-      domain: process.env.VERCEL_ENV === "production" ? "unstage.dev" : undefined,
+      domain: "unstage.dev",
     },
     database: {
       generateId: false,
