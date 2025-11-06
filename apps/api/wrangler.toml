@@ -3,6 +3,21 @@ main = "src/index.ts"
 compatibility_flags = [ "nodejs_compat", "nodejs_compat_populate_process_env" ]
 compatibility_date = "2025-07-30"
 
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1
+
 # Production environment
 [env.production]
 name = "unstage-api-production"
