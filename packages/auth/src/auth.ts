@@ -13,7 +13,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const authConfig = {
   trustedOrigins:
-    process.env.NODE_ENV === "production"
+    process.env.VERCEL_ENV === "production"
       ? ["https://unstage.dev", "https://app.unstage.dev", "https://api.unstage.dev"]
       : ["http://localhost:3000", "http://localhost:3001", "http://localhost:8787"],
   databaseHooks: {
@@ -34,7 +34,7 @@ const authConfig = {
   advanced: {
     cookiePrefix: "unstage",
     crossSubDomainCookies: {
-      enabled: process.env.NODE_ENV === "production",
+      enabled: process.env.VERCEL_ENV === "production",
       domain: "unstage.dev",
     },
     database: {
