@@ -34,8 +34,8 @@ const authConfig = {
   advanced: {
     cookiePrefix: "unstage",
     crossSubDomainCookies: {
-      enabled: process.env.VERCEL_ENV === "production",
-      domain: "unstage.dev",
+      enabled: true,
+      domain: process.env.VERCEL_ENV === "production" ? "unstage.dev" : undefined,
     },
     database: {
       generateId: false,
