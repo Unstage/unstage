@@ -35,7 +35,7 @@ const authConfig = {
     cookiePrefix: "unstage",
     crossSubDomainCookies: {
       enabled: process.env.NODE_ENV === "production",
-      domain: "app.unstage.dev",
+      domain: "unstage.dev",
     },
     database: {
       generateId: false,
