@@ -37,3 +37,11 @@ export function getApiUrl() {
 export function getCdnUrl() {
   return "https://cdn.unstage.dev";
 }
+
+export function getCookieDomain() {
+  if (process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production") {
+    return "unstage.dev";
+  }
+
+  return undefined; // Use default (current hostname) for development
+}

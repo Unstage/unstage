@@ -2,7 +2,7 @@ import db from "@unstage/db";
 import { getUserById } from "@unstage/db/queries/users";
 import EmailOtp from "@unstage/email/email-otp";
 import { assertIsSignIn } from "@unstage/utils/assertions";
-import { getApiUrl, getAppUrl, getWebsiteUrl } from "@unstage/utils/envs";
+import { getApiUrl, getAppUrl, getCookieDomain, getWebsiteUrl } from "@unstage/utils/envs";
 import { type BetterAuthOptions, betterAuth, type Session } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -33,7 +33,7 @@ const authConfig = {
     cookiePrefix: "unstage",
     crossSubDomainCookies: {
       enabled: true,
-      domain: "unstage.dev",
+      domain: getCookieDomain(),
     },
     database: {
       generateId: false,
